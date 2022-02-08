@@ -6,8 +6,6 @@ import WeatherCard from '../../../src/component/weather/WeatherCard';
 import useWeatherApi from '../../../src/hooks/useWeatherApi';
 import WeatherSetting from '../../../src/page/weather/WeatherSetting';
 import { findLocation } from '../../utils';
-import { Radio } from 'antd';
-import { Link } from 'react-router-dom';
 
 const theme = {
     light: {
@@ -85,18 +83,6 @@ const WeatherApp = () => {
     return (
         <ThemeProvider theme={theme[currentTheme]}>
             <Container>
-                <Radio.Group>
-                    <Radio.Button value="weather">
-                        <Link to="/weather">
-                            Weather
-                        </Link>
-                    </Radio.Button>
-                    <Radio.Button value="todolist">
-                        <Link to="/todolist">
-                            Todolist
-                        </Link>
-                    </Radio.Button>
-                </Radio.Group>
                 {
                     currentPage === 'WeatherCard' && (
                         <WeatherCard
