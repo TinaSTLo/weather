@@ -26,24 +26,35 @@ const WeatherCardWrapper = styled.div`
   padding: 30px 15px;
   box-shadow: ${({ theme }) => theme.boxShadow};
   background-color: ${({ theme }) => theme.foregroundColor};
+  border-radius: 16px;
+  width: 937px;
+  height: 555px;
+  background: #FFFFFF;
 `;
 
 const Location = styled.div`
   font-size: 28px;
-  margin-bottom: 20px;
   color: ${({ theme }) => theme.titleColor};
 
   .ant-select {
-    font-size: 22px;
+    font-size: 48px;
+    .ant-select-selector {
+      height: 55px;
+      margin: 20px;
+    }
+    .ant-select-selection-item {
+      padding: 10px;
+    }
   }
-  .ant-select-single:not(.ant-select-customize-input) .ant-select-selector{
+  .ant-select-single:not(.ant-select-customize-input) .ant-select-selector {
     padding: 0 0;
   }
+
 `;
 
 const Description = styled.div`
-  font-size: 16px;
-  margin-bottom: 30px;
+  margin: -10px 0px 0px 40px;
+  font-size: 32px;
   color: ${({ theme }) => theme.textColor};
 `;
 
@@ -51,45 +62,47 @@ const CurrentWeather = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 30px;
 `;
 
 const Temperature = styled.div`
-  font-size: 96px;
-  font-weight: 300;
+  font-size: 128px;
+  margin-left: 40px;
+  font-weight: 350;
   display: flex;
   color: ${({ theme }) => theme.temperatureColor};
 `;
 
 const Celsius = styled.div`
   font-weight: normal;
-  font-size: 42px;
+  font-size: 48px;
+  margin-top: 25px;
 `;
 
 const AirFlow = styled.div`
+  font-size: 32px;
   display: flex;
   align-items: center;
-  font-size: 16x;
-  font-weight: 300;
-  margin-bottom: 20px;
+  font-weight: 350;
+  margin: 0px 0px 0px 40px;
   color: ${({ theme }) => theme.textColor};
 
   svg {
-    width: 25px;
+    width: 32px;
     height: auto;
     margin-right: 30px;
   }
 `;
 
 const Rain = styled.div`
+  font-size: 32px;
   display: flex;
   align-items: center;
-  font-size: 16x;
-  font-weight: 300;
+  margin: 0px 0px 20px 40px;
+  font-weight: 350;
   color: ${({ theme }) => theme.textColor};
 
   svg {
-    width: 25px;
+    width: 32px;
     height: auto;
     margin-right: 30px;
   }
@@ -97,17 +110,17 @@ const Rain = styled.div`
 
 const Refresh = styled.div`
   position: absolute;
-  right: 15px;
-  bottom: 15px;
-  font-size: 12px;
+  right: 115px;
+  bottom: 60px;
+  font-size: 18px;
   display: inline-flex;
   align-items: flex-end;
-  color: ${({ theme }) => theme.textColor};
+  color: #AAAAAA;
 
   svg {
     margin-left: 10px;
     width: 15px;
-    height: 15px;
+    height: 25px;
     cursor: pointer;
     animation: rotate infinite 1.5s linear;
     animation-duration: ${({ isLoading }) => (isLoading ? '1.5s' : '0s')};
@@ -153,12 +166,12 @@ const WeatherCard = (props) => {
 
     return (
         <WeatherCardWrapper>
-            <Cog onClick={() => setCurrentPage('WeatherSetting')} />
+            {/* <Cog onClick={() => setCurrentPage('WeatherSetting')} /> */}
             <Location>
                 <Select
                     ref={inputLocationRef}
                     defaultValue={locationName}
-                    style={{ width: 120 }}
+                    style={{ width: 215, margin: 10 }}
                     onChange={handleChange}
                     bordered={false}
                 >
@@ -175,7 +188,8 @@ const WeatherCard = (props) => {
             </Description>
             <CurrentWeather>
                 <Temperature>
-                    {Math.round(temperature)} <Celsius>°C</Celsius>
+                    {Math.round(temperature)} 
+                    <Celsius>°C</Celsius>
                 </Temperature>
                 <WeatherIcon
                     currentWeatherCode={weatherCode}

@@ -4,13 +4,13 @@ import sunriseAndSunsetData from '../../sunrise-sunset.json';
 import { ThemeProvider } from '@emotion/react'
 import WeatherCard from '../../../src/component/weather/WeatherCard';
 import useWeatherApi from '../../../src/hooks/useWeatherApi';
-import WeatherSetting from '../../../src/page/weather/WeatherSetting';
+// import WeatherSetting from '../../../src/page/weather/WeatherSetting';
 import { findLocation } from '../../utils';
 
 const theme = {
     light: {
         backgroundColor: '#ededed',
-        foregroundColor: '#f9f9f9',
+        foregroundColor: '#fff',
         boxShadow: '0 1px 3px 0 #999999',
         titleColor: '#212121',
         temperatureColor: '#757575',
@@ -20,20 +20,18 @@ const theme = {
         backgroundColor: '#1F2022',
         foregroundColor: '#121416',
         boxShadow: '0 1px 4px 0 rgba(12, 12, 13, 0.2), 0 0 0 1px rgba(0, 0, 0, 0.15)',
-        titleColor: '#f9f9fa',
+        titleColor: '#fff',
         temperatureColor: '#dddddd',
         textColor: '#cccccc',
     },
 };
 
 const Container = styled.div`
-  height: 100%;
-  display: flex;
-  align-items: center;
-  flex-direction: column;
-  padding-top: 100px;
-  justify-content: flex-start;
-  background-color: ${({ theme }) => theme.backgroundColor};
+    height: calc(100vh - 47px);
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: flex-start;
 `;
 
 const getMoment = (locationName) => {
@@ -95,7 +93,7 @@ const WeatherApp = () => {
                         />
                     )
                 }
-                {
+                {/* {
                     currentPage === 'WeatherSetting' && (
                         <WeatherSetting
                             setCurrentPage={setCurrentPage}
@@ -103,7 +101,7 @@ const WeatherApp = () => {
                             cityName={currentLocation.cityName}
                         />
                     )
-                }
+                } */}
             </Container>
         </ThemeProvider>
     );

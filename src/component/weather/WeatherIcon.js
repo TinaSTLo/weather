@@ -16,12 +16,13 @@ import { ReactComponent as NightPartiallyClearWithRain } from '../../../src/asse
 import { ReactComponent as NightSnowing } from '../../../src/assets/images/night-snowing.svg';
 
 const IconContainer = styled.div`
-  flex-basis: 30%;
-
-  svg {
-    max-height: 110px;
-    max-width: 110px;
-  }
+    flex-basis: 22%;
+    transform:scale(2.5);
+    margin-top: -25px;
+    svg {
+        max-height: 110px;
+        max-width: 110px;
+    }
 `;
 
 const weatherTypes = {
