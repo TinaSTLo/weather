@@ -5,19 +5,19 @@ import { ReactComponent as RefreshIcon } from '../../../src/assets/images/icon_r
 import { ReactComponent as RainIcon } from '../../../src/assets/images/icon_rain.svg';
 import { ReactComponent as LoadingIcon } from '../../../src/assets/images/loading.svg';
 import { ReactComponent as Wind } from '../../../src/assets/images/icon_wind.svg';
-import { ReactComponent as CogIcon } from '../../../src/assets/images/cog.svg';
+// import { ReactComponent as CogIcon } from '../../../src/assets/images/cog.svg';
 import { Select } from 'antd';
 import { availableLocations } from '../../../src/utils';
 const { Option } = Select;
 
-const Cog = styled(CogIcon)`
-  position: absolute;
-  top: 30px;
-  right: 15px;
-  width: 15px;
-  height: 15px;
-  cursor: pointer;
-`;
+// const Cog = styled(CogIcon)`
+//   position: absolute;
+//   top: 30px;
+//   right: 15px;
+//   width: 15px;
+//   height: 15px;
+//   cursor: pointer;
+// `;
 
 const WeatherCardWrapper = styled.div`
   position: relative;
@@ -138,7 +138,7 @@ const Refresh = styled.div`
 
 
 const WeatherCard = (props) => {
-    const { weatherElement, moment, fetchData, setCurrentPage, cityName, setCurrentCity } = props;
+    const { weatherElement, moment, fetchData, cityName, setCurrentCity } = props;
     const locations = availableLocations.map((location) => location.cityName);
     const [locationName, setLocationName] = useState(cityName);
     const inputLocationRef = useRef(null);
