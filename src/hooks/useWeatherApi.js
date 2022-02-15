@@ -1,12 +1,12 @@
 import { useState, useEffect, useCallback } from 'react';
+import axios from 'axios';
 
 const fetchCurrentWeather = (locationName) => {
-    return fetch(
-        `https://opendata.cwb.gov.tw/api/v1/rest/datastore/O-A0003-001?Authorization=CWB-5DE01DD1-3DCA-4AFF-85A7-6D78002F1B20&locationName=${locationName}`
+    return axios.get(
+        `https://opendata.cwb.gov.tw/api/v1/rest/datastore/O-A0003-001?Authorization=CWB-5DE01DD1-3DCA-4AFF-85A7-6D78002F1B20&locationName=${locationName}`,
     )
-        .then((response) => response.json())
-        .then((data) => {
-            const locationData = data.records.location[0];
+        .then((res) => {
+            const locationData = res.data.records.location[0];
             if (locationData) {
                 const weatherElements = locationData.weatherElement.reduce(
                     (neededElements, item) => {
@@ -37,12 +37,11 @@ const fetchCurrentWeather = (locationName) => {
 };
 
 const fetchWeatherForecast = (cityName) => {
-    return fetch(
+    return axios.get(
         `https://opendata.cwb.gov.tw/api/v1/rest/datastore/F-C0032-001?Authorization=CWB-5DE01DD1-3DCA-4AFF-85A7-6D78002F1B20&locationName=${cityName}`
     )
-        .then((response) => response.json())
-        .then((data) => {
-            const locationData = data.records.location[0];
+        .then((res) => {
+            const locationData = res.data.records.location[0];
             if (locationData) {
                 const weatherElements = locationData.weatherElement.reduce(
                     (neededElements, item) => {
