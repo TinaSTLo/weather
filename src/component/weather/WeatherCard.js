@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import styled from '@emotion/styled';
 import WeatherIcon from '../../../src/component/weather/WeatherIcon';
 import { ReactComponent as RefreshIcon } from '../../../src/assets/images/icon_refresh.svg';
@@ -20,120 +20,119 @@ const { Option } = Select;
 // `;
 
 const WeatherCardWrapper = styled.div`
-  position: relative;
-  min-width: 360px;
-  box-sizing: border-box;
-  padding: 30px 15px;
-  box-shadow: ${({ theme }) => theme.boxShadow};
-  background-color: ${({ theme }) => theme.foregroundColor};
-  border-radius: 16px;
-  width: 937px;
-  height: 555px;
-  background: #FFFFFF;
+    position: relative;
+    min-width: 360px;
+    box-sizing: border-box;
+    padding: 30px 15px;
+    box-shadow: ${({ theme }) => theme.boxShadow};
+    background-color: ${({ theme }) => theme.foregroundColor} !important;
+    border-radius: 16px;
+    width: 937px;
+    height: 555px;
+    background: #FFFFFF;
 `;
 
 const Location = styled.div`
-  font-size: 28px;
-  color: ${({ theme }) => theme.titleColor};
+    font-size: 28px;
+    color: ${({ theme }) => theme.titleColor};
 
-  .ant-select {
-    font-size: 48px;
-    .ant-select-selector {
-      height: 55px;
-      margin: 20px;
+    .ant-select {
+        font-size: 48px;
+        .ant-select-selector {
+            height: 55px;
+            margin: 20px;
+        }
+        .ant-select-selection-item {
+            padding: 10px;
+        }
     }
-    .ant-select-selection-item {
-      padding: 10px;
+    .ant-select-single:not(.ant-select-customize-input) .ant-select-selector {
+        padding: 0 0;
     }
-  }
-  .ant-select-single:not(.ant-select-customize-input) .ant-select-selector {
-    padding: 0 0;
-  }
-
 `;
 
 const Description = styled.div`
-  margin: -10px 0px 0px 40px;
-  font-size: 32px;
-  color: ${({ theme }) => theme.textColor};
+    margin: -10px 0px 0px 40px;
+    font-size: 32px;
+    color: ${({ theme }) => theme.textColor};
 `;
 
 const CurrentWeather = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 `;
 
 const Temperature = styled.div`
-  font-size: 128px;
-  margin-left: 40px;
-  font-weight: 350;
-  display: flex;
-  color: ${({ theme }) => theme.temperatureColor};
+    font-size: 128px;
+    margin-left: 40px;
+    font-weight: 350;
+    display: flex;
+    color: ${({ theme }) => theme.temperatureColor};
 `;
 
 const Celsius = styled.div`
-  font-weight: normal;
-  font-size: 48px;
-  margin-top: 25px;
+    font-weight: normal;
+    font-size: 48px;
+    margin-top: 25px;
 `;
 
 const AirFlow = styled.div`
-  font-size: 32px;
-  display: flex;
-  align-items: center;
-  font-weight: 350;
-  margin: 0px 0px 0px 40px;
-  color: ${({ theme }) => theme.textColor};
+    font-size: 32px;
+    display: flex;
+    align-items: center;
+    font-weight: 350;
+    margin: 0px 0px 0px 40px;
+    color: ${({ theme }) => theme.textColor};
 
-  svg {
-    width: 32px;
-    height: auto;
-    margin-right: 30px;
-  }
+    svg {
+        width: 32px;
+        height: auto;
+        margin-right: 30px;
+    }
 `;
 
 const Rain = styled.div`
-  font-size: 32px;
-  display: flex;
-  align-items: center;
-  margin: 0px 0px 20px 40px;
-  font-weight: 350;
-  color: ${({ theme }) => theme.textColor};
+    font-size: 32px;
+    display: flex;
+    align-items: center;
+    margin: 0px 0px 20px 40px;
+    font-weight: 350;
+    color: ${({ theme }) => theme.textColor};
 
-  svg {
-    width: 32px;
-    height: auto;
-    margin-right: 30px;
-  }
+    svg {
+        width: 32px;
+        height: auto;
+        margin-right: 30px;
+    }
 `;
 
 const Refresh = styled.div`
-  position: absolute;
-  right: 115px;
-  bottom: 60px;
-  font-size: 18px;
-  display: inline-flex;
-  align-items: flex-end;
-  color: #AAAAAA;
+    position: absolute;
+    right: 115px;
+    bottom: 60px;
+    font-size: 18px;
+    display: inline-flex;
+    align-items: flex-end;
+    color: #AAAAAA;
 
-  svg {
-    margin-left: 10px;
-    width: 15px;
-    height: 25px;
-    cursor: pointer;
-    animation: rotate infinite 1.5s linear;
-    animation-duration: ${({ isLoading }) => (isLoading ? '1.5s' : '0s')};
-  }
+    svg {
+        margin-left: 10px;
+        width: 15px;
+        height: 25px;
+        cursor: pointer;
+        animation: rotate infinite 1.5s linear;
+        animation-duration: ${({ isLoading }) => (isLoading ? '1.5s' : '0s')};
+    }
 
-  @keyframes rotate {
-    from {
-      transform: rotate(360deg);
+    @keyframes rotate {
+        from {
+        transform: rotate(360deg);
+        }
+        to {
+        transform: rotate(0deg);
+        }
     }
-    to {
-      transform: rotate(0deg);
-    }
-  }
 `;
 
 
@@ -174,21 +173,22 @@ const WeatherCard = (props) => {
                     style={{ width: 215, margin: 10 }}
                     onChange={handleChange}
                     bordered={false}
+                    dropdownStyle={{ background: '#FEC753', borderRadius: 8, textAlign: 'center' }}
                 >
                     {
                         locations && locations.map(location => (
-                            <Option value={location} key={location} > {location} </Option>
+                            <Option style={{ fontSize: 26, lineHeight: 2 }} value={location} key={location} > {location} </Option>
                         ))
                     }
                 </Select>
-            </Location>
+            </Location >
             <Description>
                 {description}
                 {comfortability}
             </Description>
             <CurrentWeather>
                 <Temperature>
-                    {Math.round(temperature)} 
+                    {Math.round(temperature)}
                     <Celsius>°C</Celsius>
                 </Temperature>
                 <WeatherIcon
@@ -218,7 +218,7 @@ const WeatherCard = (props) => {
                         : <RefreshIcon />
                 }
             </Refresh>
-        </WeatherCardWrapper>
+        </WeatherCardWrapper >
     )
 }
 
