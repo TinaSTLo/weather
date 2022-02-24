@@ -5,6 +5,7 @@ import { Button } from 'antd';
 import { Link } from 'react-router-dom';
 
 import WeatherApp from '../../src/page/weather/WeatherApp';
+import TodoListApp from '../../src/page/todoList/todoListApp';
 
 const Container = styled.div`
     position: fixed;
@@ -89,7 +90,7 @@ const Guard = () => {
                 </Button>
             </ButtonContainer>
             <Route path={'/weather'} component={WeatherApp} />
-            {/* <Route path={'/todolist'} component={TodoListApp} /> */}
+            <Route path={'/todolist'} component={TodoListApp} />
             <Redirect to='/weather' />
         </Container>
     );

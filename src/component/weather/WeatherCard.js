@@ -34,16 +34,19 @@ const WeatherCardWrapper = styled.div`
 
 const Location = styled.div`
     font-size: 28px;
-    color: ${({ theme }) => theme.titleColor};
 
     .ant-select {
         font-size: 48px;
         .ant-select-selector {
             height: 55px;
             margin: 20px;
+            color: ${({ theme }) => theme.titleColor} !important;
         }
         .ant-select-selection-item {
             padding: 10px;
+        }
+        .ant-select-arrow {
+            color: ${({ theme }) => theme.titleColor} !important;
         }
     }
     .ant-select-single:not(.ant-select-customize-input) .ant-select-selector {
