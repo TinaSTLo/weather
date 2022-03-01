@@ -57,25 +57,40 @@ const InputStyle = styled(Input)`
 const TodoList = () => {
     const storageCity = localStorage.getItem('cityName');
     const [currentTheme, setCurrentTheme] = useState('dark');
-    const [currentPage, setCurrentPage] = useState('WeatherCard');
+    const [currentPage, setCurrentPage] = useState('todoList');
     const [currentCity, setCurrentCity] = useState(storageCity || '臺北市');
 
     const currentLocation = findLocation(currentCity) || {};
     const [weatherElement, fetchData] = useWeatherApi(currentLocation);
 
+    const [singleValue, setSingleValue] = useState('');
+    const [todos, setTodos] = useState([1]);
+
+    console.log('todos :>> ', todos);
+
+    const onKeyPress = (e) => {
+        if (e.key === 'Enter') {
+            // console.log('e :>> ', e.target.value);
+            // setSingleValue(e.target.value);
+            setTodos([e.target.value, ...todos]);
+            setSingleValue('');
+        }
+    }
+
     return (
         // <TodoListContainer>
         <ThemeProvider theme={theme[currentTheme]}>
-            <InputStyle placeholder="請輸入待辦事項"></InputStyle>
+            <InputStyle placeholder="請輸入待辦事項" onKeyPress={onKeyPress}/>
             <Container>
                 {
-                    currentPage === 'WeatherCard' && (
+                    currentPage === 'todoList' && (
                         <TodoListCard
                             weatherElement={weatherElement}
                             fetchData={fetchData}
                             setCurrentPage={setCurrentPage}
                             setCurrentCity={setCurrentCity}
                             cityName={currentLocation.cityName}
+                            todos={todos}
                         />
                     )
                 }
