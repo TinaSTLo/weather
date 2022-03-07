@@ -4,7 +4,6 @@ import sunriseAndSunsetData from '../../sunrise-sunset.json';
 import { ThemeProvider } from '@emotion/react'
 import WeatherCard from '../../../src/component/weather/WeatherCard';
 import useWeatherApi from '../../../src/hooks/useWeatherApi';
-// import WeatherSetting from '../../../src/page/weather/WeatherSetting';
 import { findLocation } from '../../utils';
 
 const theme = {
@@ -62,7 +61,6 @@ const getMoment = (locationName) => {
 const WeatherApp = () => {
     const storageCity = localStorage.getItem('cityName');
     const [currentTheme, setCurrentTheme] = useState('light');
-    const [currentPage, setCurrentPage] = useState('WeatherCard');
     const [currentCity, setCurrentCity] = useState(storageCity || '臺北市');
 
     const currentLocation = findLocation(currentCity) || {};
@@ -81,27 +79,13 @@ const WeatherApp = () => {
     return (
         <ThemeProvider theme={theme[currentTheme]}>
             <Container>
-                {
-                    currentPage === 'WeatherCard' && (
-                        <WeatherCard
-                            weatherElement={weatherElement}
-                            moment={moment}
-                            fetchData={fetchData}
-                            setCurrentPage={setCurrentPage}
-                            setCurrentCity={setCurrentCity}
-                            cityName={currentLocation.cityName}
-                        />
-                    )
-                }
-                {/* {
-                    currentPage === 'WeatherSetting' && (
-                        <WeatherSetting
-                            setCurrentPage={setCurrentPage}
-                            setCurrentCity={setCurrentCity}
-                            cityName={currentLocation.cityName}
-                        />
-                    )
-                } */}
+                <WeatherCard
+                    weatherElement={weatherElement}
+                    moment={moment}
+                    fetchData={fetchData}
+                    setCurrentCity={setCurrentCity}
+                    cityName={currentLocation.cityName}
+                />
             </Container>
         </ThemeProvider>
     );

@@ -1,0 +1,16 @@
+{
+    "compilerOptions": {
+        "module": "esnext",
+        "target": "es5",
+        "moduleResolution": "node",
+        "baseUrl": ".",
+        "paths": {
+            "src": [
+                "src"
+            ]
+        }
+    },
+    "include": [
+        "src"
+    ]
+}

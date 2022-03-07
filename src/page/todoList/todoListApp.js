@@ -1,10 +1,9 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState } from 'react';
 import styled from '@emotion/styled';
 import { ThemeProvider } from '@emotion/react'
 import TodoListCard from '../../component/todoList/TodoListCard';
-import useWeatherApi from '../../hooks/useWeatherApi';
-import { findLocation } from '../../utils';
 import { Input } from 'antd';
+import { useGlobalStore } from 'src/contexts/globalContext';
 
 const theme = {
     light: {
@@ -14,27 +13,8 @@ const theme = {
         titleColor: '#212121',
         temperatureColor: '#757575',
         textColor: '#828282',
-    },
-    dark: {
-        backgroundColor: '#ededed',
-        foregroundColor: '#fff',
-        boxShadow: '0 1px 3px 0 #999999',
-        titleColor: '#212121',
-        temperatureColor: '#757575',
-        textColor: '#828282',
-    },
+    }
 };
-
-// const TodoListContainer = styled.div`
-//     background-color: '#ededed';
-//     foreground-color: '#fff';
-//     title-color: '#212121';
-//     temperature-color: '#757575';
-//     text-color: '#828282';
-//     box-shadow: 0px 3px 6px #00000029;
-//     border-radius: 16px;
-//     height: 514px;
-// `;
 
 const Container = styled.div`
     height: calc(100vh - 47px);
@@ -55,54 +35,42 @@ const InputStyle = styled(Input)`
 `;
 
 const TodoList = () => {
-    const storageCity = localStorage.getItem('cityName');
-    const [currentTheme, setCurrentTheme] = useState('dark');
-    const [currentPage, setCurrentPage] = useState('todoList');
-    const [currentCity, setCurrentCity] = useState(storageCity || '臺北市');
-
-    const currentLocation = findLocation(currentCity) || {};
-    const [weatherElement, fetchData] = useWeatherApi(currentLocation);
-
     const [singleValue, setSingleValue] = useState('');
-    const [todos, setTodos] = useState([1]);
+    const { id, todos, setTodos } = useGlobalStore();
 
+    const handleInputChange = (e) => {
+        setSingleValue(e.target.value);
+    }
     console.log('todos :>> ', todos);
-
     const onKeyPress = (e) => {
         if (e.key === 'Enter') {
-            // console.log('e :>> ', e.target.value);
-            // setSingleValue(e.target.value);
-            setTodos([e.target.value, ...todos]);
-            setSingleValue('');
+            if (e.target.value) {
+                setTodos([
+                    {
+                        id: id.current,
+                        content: e.target.value,
+                        isDone: false
+                    }, ...todos]
+                );
+                setSingleValue('');
+                id.current++;
+            }
         }
     }
 
     return (
-        // <TodoListContainer>
-        <ThemeProvider theme={theme[currentTheme]}>
-            <InputStyle placeholder="請輸入待辦事項" onKeyPress={onKeyPress}/>
+        <ThemeProvider theme={theme.light}>
+            <InputStyle
+                placeholder="請輸入待辦事項"
+                onChange={handleInputChange}
+                onKeyPress={onKeyPress}
+                value={singleValue}
+            />
             <Container>
-                {
-                    currentPage === 'todoList' && (
-                        <TodoListCard
-                            weatherElement={weatherElement}
-                            fetchData={fetchData}
-                            setCurrentPage={setCurrentPage}
-                            setCurrentCity={setCurrentCity}
-                            cityName={currentLocation.cityName}
-                            todos={todos}
-                        />
-                    )
-                }
-                {/* {
-                    currentPage === 'WeatherSetting' && (
-                        <WeatherSetting
-                            setCurrentPage={setCurrentPage}
-                            setCurrentCity={setCurrentCity}
-                            cityName={currentLocation.cityName}
-                        />
-                    )
-                } */}
+                <TodoListCard
+                    todos={todos}
+                    setTodos={setTodos}
+                />
             </Container>
         </ThemeProvider>
     );

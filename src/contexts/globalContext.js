@@ -1,17 +1,19 @@
-import React, { createContext, useContext, useState } from 'react';
+import React, { createContext, useContext, useState, useRef } from 'react';
 
 export const Context = createContext();
 
 export const useGlobalStore = () => useContext(Context);
 
 export const GlobalContextProvider = ({ children }) => {
-    const [linkTo, setLinkTo] = useState('');
+    const id = useRef(1);
+    const [todos, setTodos] = useState([]);
 
     return (
         <Context.Provider
             value={{
-                linkTo,
-                setLinkTo
+                id,
+                todos,
+                setTodos,
             }}
         >
             {children}

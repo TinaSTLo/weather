@@ -1,7 +1,7 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React from 'react';
 import styled from '@emotion/styled';
 import { Empty, Tabs } from 'antd';
-import AllPage from './allPage';
+import TodoItem from './todoItem';
 
 const { TabPane } = Tabs;
 
@@ -16,9 +16,11 @@ const TodoListCardWrapper = styled.div`
     width: 937px;
     height: 514px;
     background: #FFFFFF;
+
     display: flex;
-    justify-content: center;
-    align-items: flex-start;
+    align-items: center;
+    flex-direction: column;
+    justify-content: space-between
 `;
 
 const EmptyStyle = styled(Empty)`
@@ -51,42 +53,97 @@ const TabPaneStyle = styled(TabPane)`
 `;
 
 const AllTodo = styled('div')`
-    height: 330px;
+    height: 260px;
+    margin-left: 40px;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    // align-items: stretch;
+    justify-content: flex-start;
 `;
 
+const BottomFlex = styled('div')`
+    width: 100%;
+    padding: 0px 65px;
+    display: flex;
+    justify-content: space-between;
+    font-size: 24px;
+    margin-bottom: 18px;
+`;
 
-const WeatherCard = ({ todos, ...props }) => {
+const TodoNumber = styled('div')`
+
+`;
+
+const CleanDone = styled('div')`
+    border: 1px solid #FEC753;
+    border-radius: 13px;
+    padding: 0px 30px;
+`;
+
+const WeatherCard = ({ todos, setTodos, ...props }) => {
+
+    const handleToggleIsDone = id => {
+        setTodos(todos.map(todo => {
+            if (todo.id !== id) return todo;
+            return {
+                ...todo,
+                isDone: !todo.isDone
+            }
+        }));
+    }
+
+    const handleDeleteTodo = id => {
+        setTodos(todos.filter(todo => todo.id !== id))
+    }
+
+    const notDoneNumber = todos.filter(todo => todo.isDone === false).length;
 
     return (
         <TodoListCardWrapper>
-            {/* 沒資料顯示 */}
-            {/* <EmptyStyle
-                image={Empty.PRESENTED_IMAGE_SIMPLE}
-                description={
-                    <span>
-                        未有待辦事項，請由上方輸入<br/>輸入完成後按Enter即可將項目加入清單
-                    </span>
-                }
-            >
-            </EmptyStyle> */}
-
-            {/* 有資料顯示 */}
-            <TabsStyle defaultActiveKey="1" size='large'>
-                <TabPaneStyle tab="全部" key="1">
-                    <AllTodo>
-                        {
-                            todos.map((todo, index) => <div key={index}>{todo}</div>)
+            {
+                todos.length === 0
+                    ?
+                    <EmptyStyle
+                        image={Empty.PRESENTED_IMAGE_SIMPLE}
+                        description={
+                            <span>
+                                未有待辦事項，請由上方輸入<br />輸入完成後按Enter即可將項目加入清單
+                            </span>
                         }
-                    </AllTodo>
-                    {/* <AllPage todos={todos}></AllPage> */}
-                </TabPaneStyle>
-                <TabPaneStyle tab="待完成" key="2">
-                    待完成
-                </TabPaneStyle>
-                <TabPaneStyle tab="已完成" key="3">
-                    已完成
-                </TabPaneStyle>
-            </TabsStyle>
+                    >
+                    </EmptyStyle>
+                    :
+                    <>
+                        <TabsStyle defaultActiveKey='1' size='large'>
+                            <TabPaneStyle tab='全部' key='1'>
+                                <AllTodo>
+                                    {
+                                        todos.map((todo) => <TodoItem
+                                            todo={todo}
+                                            handleToggleIsDone={handleToggleIsDone}
+                                            handleDeleteTodo={handleDeleteTodo}
+                                        />)
+                                    }
+                                </AllTodo>
+                            </TabPaneStyle>
+                            <TabPaneStyle tab='待完成' key='2'>
+                                待完成
+                            </TabPaneStyle>
+                            <TabPaneStyle tab='已完成' key='3'>
+                                已完成
+                            </TabPaneStyle>
+                        </TabsStyle>
+                        <BottomFlex>
+                            <TodoNumber>
+                                {notDoneNumber}個待完成項目
+                            </TodoNumber>
+                            <CleanDone>
+                                清除已完成項目
+                            </CleanDone>
+                        </BottomFlex>
+                    </>
+            }
         </TodoListCardWrapper >
     )
 }

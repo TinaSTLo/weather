@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef } from 'react';
 import styled from '@emotion/styled';
 import WeatherIcon from '../../../src/component/weather/WeatherIcon';
 import { ReactComponent as RefreshIcon } from '../../../src/assets/images/icon_refresh.svg';
@@ -9,15 +9,6 @@ import { ReactComponent as Wind } from '../../../src/assets/images/icon_wind.svg
 import { Select } from 'antd';
 import { availableLocations } from '../../../src/utils';
 const { Option } = Select;
-
-// const Cog = styled(CogIcon)`
-//   position: absolute;
-//   top: 30px;
-//   right: 15px;
-//   width: 15px;
-//   height: 15px;
-//   cursor: pointer;
-// `;
 
 const WeatherCardWrapper = styled.div`
     position: relative;
@@ -168,7 +159,6 @@ const WeatherCard = (props) => {
 
     return (
         <WeatherCardWrapper>
-            {/* <Cog onClick={() => setCurrentPage('WeatherSetting')} /> */}
             <Location>
                 <Select
                     ref={inputLocationRef}
