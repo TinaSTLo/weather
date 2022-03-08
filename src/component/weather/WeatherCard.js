@@ -1,26 +1,34 @@
 import React, { useState, useRef } from 'react';
 import styled from '@emotion/styled';
-import WeatherIcon from '../../../src/component/weather/WeatherIcon';
-import { ReactComponent as RefreshIcon } from '../../../src/assets/images/icon_refresh.svg';
-import { ReactComponent as RainIcon } from '../../../src/assets/images/icon_rain.svg';
-import { ReactComponent as LoadingIcon } from '../../../src/assets/images/loading.svg';
-import { ReactComponent as Wind } from '../../../src/assets/images/icon_wind.svg';
-// import { ReactComponent as CogIcon } from '../../../src/assets/images/cog.svg';
+
+// Icon
+import WeatherIcon from 'src/component/weather/WeatherIcon';
+import { ReactComponent as RefreshIcon } from 'src/assets/images/icon_refresh.svg';
+import { ReactComponent as RainIcon } from 'src/assets/images/icon_rain.svg';
+import { ReactComponent as LoadingIcon } from 'src/assets/images/loading.svg';
+import { ReactComponent as Wind } from 'src/assets/images/icon_wind.svg';
+
+// Ant design
 import { Select } from 'antd';
-import { availableLocations } from '../../../src/utils';
+
+// Tool
+import { availableLocations } from 'src/utils';
+
 const { Option } = Select;
 
 const WeatherCardWrapper = styled.div`
     position: relative;
-    min-width: 360px;
-    box-sizing: border-box;
-    padding: 30px 15px;
-    box-shadow: ${({ theme }) => theme.boxShadow};
-    background-color: ${({ theme }) => theme.foregroundColor} !important;
-    border-radius: 16px;
+
     width: 937px;
     height: 555px;
+    min-width: 360px;
+    padding: 30px 15px;
+    border-radius: 16px;
+    box-sizing: border-box;
+
     background: #FFFFFF;
+    background-color: ${({ theme }) => theme.foregroundColor} !important;
+    box-shadow: ${({ theme }) => theme.boxShadow};
 `;
 
 const Location = styled.div`
@@ -28,6 +36,7 @@ const Location = styled.div`
 
     .ant-select {
         font-size: 48px;
+
         .ant-select-selector {
             height: 55px;
             margin: 20px;
@@ -47,56 +56,66 @@ const Location = styled.div`
 
 const Description = styled.div`
     margin: -10px 0px 0px 40px;
+
     font-size: 32px;
     color: ${({ theme }) => theme.textColor};
 `;
 
 const CurrentWeather = styled.div`
     display: flex;
-    justify-content: space-between;
     align-items: center;
+    justify-content: space-between;
 `;
 
 const Temperature = styled.div`
-    font-size: 128px;
-    margin-left: 40px;
-    font-weight: 350;
     display: flex;
+
+    margin-left: 40px;
+
+    font-size: 128px;
+    font-weight: 350;
     color: ${({ theme }) => theme.temperatureColor};
 `;
 
 const Celsius = styled.div`
+    margin-top: 25px;
+
     font-weight: normal;
     font-size: 48px;
-    margin-top: 25px;
 `;
 
 const AirFlow = styled.div`
-    font-size: 32px;
     display: flex;
     align-items: center;
-    font-weight: 350;
+
     margin: 0px 0px 0px 40px;
+
+    font-size: 32px;
+    font-weight: 350;
     color: ${({ theme }) => theme.textColor};
 
     svg {
         width: 32px;
         height: auto;
+
         margin-right: 30px;
     }
 `;
 
 const Rain = styled.div`
-    font-size: 32px;
     display: flex;
     align-items: center;
+
     margin: 0px 0px 20px 40px;
+
+    font-size: 32px;
     font-weight: 350;
     color: ${({ theme }) => theme.textColor};
 
     svg {
         width: 32px;
         height: auto;
+
         margin-right: 30px;
     }
 `;
@@ -105,15 +124,17 @@ const Refresh = styled.div`
     position: absolute;
     right: 115px;
     bottom: 60px;
-    font-size: 18px;
     display: inline-flex;
     align-items: flex-end;
+
+    font-size: 18px;
     color: #AAAAAA;
 
     svg {
-        margin-left: 10px;
         width: 15px;
         height: 25px;
+        margin-left: 10px;
+
         cursor: pointer;
         animation: rotate infinite 1.5s linear;
         animation-duration: ${({ isLoading }) => (isLoading ? '1.5s' : '0s')};
@@ -121,20 +142,34 @@ const Refresh = styled.div`
 
     @keyframes rotate {
         from {
-        transform: rotate(360deg);
+            transform: rotate(360deg);
         }
         to {
-        transform: rotate(0deg);
+            transform: rotate(0deg);
         }
     }
 `;
 
+const SelectStyle = styled(Select)`
+    width: 215px;
+    margin: 10px;
+`;
 
-const WeatherCard = (props) => {
-    const { weatherElement, moment, fetchData, cityName, setCurrentCity } = props;
-    const locations = availableLocations.map((location) => location.cityName);
-    const [locationName, setLocationName] = useState(cityName);
-    const inputLocationRef = useRef(null);
+/**
+ * 即時天氣預報 頁面
+ *
+ * @param {object} weatherElement 各種天氣參數
+ * @param {string} moment 取得現在時間狀態(day/night)
+ * @param {function(e)} fetchData 取天氣API
+ * @param {string} cityName 城市名稱
+ * @param {function(e)} setCurrentCity 現在選取的城市
+ *
+ * @returns {JSX.Element}
+ */
+const WeatherCard = ({ weatherElement, moment, fetchData, cityName, setCurrentCity }) => {
+    const locations = availableLocations.map((location) => location.cityName);// 取地區的城市名稱
+    const [locationName, setLocationName] = useState(cityName);// 城市名稱
+    const inputLocationRef = useRef(null);// 存loaction input ref
 
     const {
         observationTime,
@@ -144,9 +179,14 @@ const WeatherCard = (props) => {
         weatherCode,
         rainPossibility,
         comfortability,
-        isLoading,
+        isLoading
     } = weatherElement;
 
+    /**
+     * 選取select component
+     *
+     * @param {string} value select值
+     */
     const handleChange = (value) => {
         if (locations.includes(value)) {
             setCurrentCity(value);
@@ -155,25 +195,31 @@ const WeatherCard = (props) => {
             alert(`儲存失敗：您輸入的 ${value} 並非有效的地區`);
             return;
         }
-    }
+    };
 
     return (
         <WeatherCardWrapper>
             <Location>
-                <Select
+                <SelectStyle
                     ref={inputLocationRef}
                     defaultValue={locationName}
-                    style={{ width: 215, margin: 10 }}
                     onChange={handleChange}
                     bordered={false}
                     dropdownStyle={{ background: '#FEC753', borderRadius: 8, textAlign: 'center' }}
                 >
                     {
-                        locations && locations.map(location => (
-                            <Option style={{ fontSize: 26, lineHeight: 2 }} value={location} key={location} > {location} </Option>
+                        locations &&
+                        locations.map(location => (
+                            <Option
+                                style={{ fontSize: 26, lineHeight: 2 }}
+                                value={location}
+                                key={location}
+                            >
+                                {location}
+                            </Option>
                         ))
                     }
-                </Select>
+                </SelectStyle>
             </Location >
             <Description>
                 {description}
@@ -200,11 +246,13 @@ const WeatherCard = (props) => {
             <Refresh onClick={fetchData} isLoading={isLoading}>
                 最後觀測時間：
                 {
-                    observationTime && new Intl.DateTimeFormat('zh-TW', {
+                    observationTime &&
+                    new Intl.DateTimeFormat('zh-TW', {
                         hour: 'numeric',
-                        minute: 'numeric',
+                        minute: 'numeric'
                     }).format(new Date(observationTime))
-                }{' '}
+                }
+                {' '}
                 {
                     isLoading
                         ? <LoadingIcon />
@@ -212,7 +260,7 @@ const WeatherCard = (props) => {
                 }
             </Refresh>
         </WeatherCardWrapper >
-    )
-}
+    );
+};
 
 export default WeatherCard;

@@ -1,10 +1,18 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import styled from '@emotion/styled';
-import sunriseAndSunsetData from '../../sunrise-sunset.json';
-import { ThemeProvider } from '@emotion/react'
-import WeatherCard from '../../../src/component/weather/WeatherCard';
-import useWeatherApi from '../../../src/hooks/useWeatherApi';
-import { findLocation } from '../../utils';
+import { ThemeProvider } from '@emotion/react';
+
+// Data
+import sunriseAndSunsetData from 'src/sunrise-sunset.json';
+
+// Shared component
+import WeatherCard from 'src/component/weather/WeatherCard';
+
+// API
+import useWeatherApi from 'src/hooks/useWeatherApi';
+
+// Tool
+import { findLocation } from 'src/utils.js';
 
 const theme = {
     light: {
@@ -13,7 +21,7 @@ const theme = {
         boxShadow: '0 1px 3px 0 #999999',
         titleColor: '#212121',
         temperatureColor: '#757575',
-        textColor: '#828282',
+        textColor: '#828282'
     },
     dark: {
         backgroundColor: '#1F2022',
@@ -21,28 +29,35 @@ const theme = {
         boxShadow: '0 1px 4px 0 rgba(12, 12, 13, 0.2), 0 0 0 1px rgba(0, 0, 0, 0.15)',
         titleColor: '#fff',
         temperatureColor: '#dddddd',
-        textColor: '#cccccc',
-    },
+        textColor: '#cccccc'
+    }
 };
 
 const Container = styled.div`
-    height: calc(100vh - 47px);
     display: flex;
     align-items: center;
     flex-direction: column;
     justify-content: flex-start;
+
+    height: calc(100vh - 47px);
 `;
 
+/**
+ * 處理目前時間狀態
+ * @param {string} locationName 地區名稱
+ *
+ * @returns {string} day/night
+ */
 const getMoment = (locationName) => {
     const location = sunriseAndSunsetData.find((data) => data.locationName === locationName);
-    if (!location) return null;
+    if (!location) { return null; }
 
     const now = new Date();
 
-    const nowDate = Intl.DateTimeFormat('zh-TW', {
+    const nowDate = new Intl.DateTimeFormat('zh-TW', {
         year: 'numeric',
         month: '2-digit',
-        day: '2-digit',
+        day: '2-digit'
     })
         .format(now)
         .replace(/\//g, '-');
@@ -58,20 +73,32 @@ const getMoment = (locationName) => {
         : 'night';
 };
 
+/**
+ * 天氣頁面
+ *
+ * @returns {JSX.Element}
+ */
 const WeatherApp = () => {
-    const storageCity = localStorage.getItem('cityName');
-    const [currentTheme, setCurrentTheme] = useState('light');
-    const [currentCity, setCurrentCity] = useState(storageCity || '臺北市');
+    const storageCity = localStorage.getItem('cityName'); // localStorage取城市名稱
 
-    const currentLocation = findLocation(currentCity) || {};
+    const [currentTheme, setCurrentTheme] = useState('light'); // 目前主題
+    const [currentCity, setCurrentCity] = useState(storageCity || '臺北市'); //目前城市名稱
+
+    const currentLocation = findLocation(currentCity) || {}; // 目前地點
     const [weatherElement, fetchData] = useWeatherApi(currentLocation);
 
     const moment = useMemo(() => getMoment(currentLocation.sunriseCityName), [currentLocation.sunriseCityName]);
 
+    /**
+     * 設定主題
+     */
     useEffect(() => {
         setCurrentTheme(moment === 'day' ? 'light' : 'dark');
     }, [moment]);
 
+    /**
+     * localStorage設定城市名稱
+     */
     useEffect(() => {
         localStorage.setItem('cityName', currentCity);
     }, [currentCity]);

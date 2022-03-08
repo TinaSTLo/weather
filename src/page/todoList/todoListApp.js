@@ -1,8 +1,14 @@
 import React, { useState } from 'react';
 import styled from '@emotion/styled';
-import { ThemeProvider } from '@emotion/react'
-import TodoListCard from '../../component/todoList/TodoListCard';
+import { ThemeProvider } from '@emotion/react';
+
+// Shared component
+import TodoListCard from 'src/component/todoList/TodoListCard';
+
+// Ant design
 import { Input } from 'antd';
+
+// Global context
 import { useGlobalStore } from 'src/contexts/globalContext';
 
 const theme = {
@@ -12,51 +18,65 @@ const theme = {
         boxShadow: '0 1px 3px 0 #999999',
         titleColor: '#212121',
         temperatureColor: '#757575',
-        textColor: '#828282',
+        textColor: '#828282'
     }
 };
 
 const Container = styled.div`
-    height: calc(100vh - 47px);
     display: flex;
     align-items: center;
     flex-direction: column;
     justify-content: flex-start;
+
+    height: calc(100vh - 47px);
 `;
 
 const InputStyle = styled(Input)`
     width: 937px;
-    box-shadow: 0px 3px 6px #00000029;
-    border-radius: 16px;
     height: 75px;
     margin-bottom: 16px;
-    font-size: 24px;
     padding-left: 16px;
+    border-radius: 16px;
+
+    box-shadow: 0px 3px 6px #00000029;
+
+    font-size: 24px;
 `;
 
 const TodoList = () => {
-    const [singleValue, setSingleValue] = useState('');
     const { id, todos, setTodos } = useGlobalStore();
+    const [singleValue, setSingleValue] = useState(''); // input值
 
+    /**
+     * 待辦事項 input 設定singleValue值
+     *
+     * @param {*} e event
+     */
     const handleInputChange = (e) => {
         setSingleValue(e.target.value);
-    }
-    console.log('todos :>> ', todos);
+    };
+
+    /**
+     * 監聽按Enter後 設定setTodos值
+     *
+     * @param {*} e event
+     */
     const onKeyPress = (e) => {
         if (e.key === 'Enter') {
             if (e.target.value) {
                 setTodos([
+                    ...todos,
                     {
                         id: id.current,
                         content: e.target.value,
                         isDone: false
-                    }, ...todos]
-                );
+                    }
+                ]);
                 setSingleValue('');
                 id.current++;
             }
         }
-    }
+    };
 
     return (
         <ThemeProvider theme={theme.light}>

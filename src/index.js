@@ -1,10 +1,22 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
-import reportWebVitals from './reportWebVitals';
-import { GlobalContextProvider } from '../src/contexts/globalContext';
-import Router from '../src/router/router';
 
+// css
+import 'src/index.css';
+
+import reportWebVitals from 'src/reportWebVitals';
+
+// Global context
+import { GlobalContextProvider } from 'src/contexts/globalContext';
+
+// Router
+import Router from 'src/router/router';
+
+/**
+ * Root
+ *
+ * @returns {JSX.Element}
+ */
 const Root = () => (
     <React.StrictMode>
         <GlobalContextProvider>
