@@ -24,12 +24,9 @@ const fetchCurrentWeather = (locationName) => {
             const locationData = res.data.records.location[0];
             if (locationData) {
                 const weatherElements = locationData.weatherElement.reduce((neededElements, item) => {
-                    console.log('neededElements :>> ', neededElements);
-                    console.log('item :>> ', item);
                     if (['TEMP', 'WDSD', 'HUMD'].includes(item.elementName)) {
                         neededElements[item.elementName] = item.elementValue;
                     }
-                    console.log('neededElements :>> ', neededElements);
                     return neededElements;
                 }, {});
 

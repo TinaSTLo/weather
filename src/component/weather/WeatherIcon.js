@@ -17,11 +17,14 @@ import { ReactComponent as NightFog } from 'src/assets/images/night-fog.svg';
 import { ReactComponent as NightPartiallyClearWithRain } from 'src/assets/images/night-partially-clear-with-rain.svg';
 import { ReactComponent as NightSnowing } from 'src/assets/images/night-snowing.svg';
 
+// GlobalContext
+import { useGlobalStore } from 'src/contexts/globalContext';
+
 const IconContainer = styled.div`
     flex-basis: 22%;
     margin-top: -25px;
 
-    transform:scale(2.5);
+    transform: ${(props) => props.rwdMode === 'desktop' ? 'scale(2.5)' : 'scale(1.5)'};
 
     svg {
         max-height: 110px;
@@ -92,6 +95,7 @@ const weatherCode2Type = weatherCode => {
  */
 const WeatherIcon = ({ currentWeatherCode, moment }) => {
     const [currentWeatherIcon, setCurrentWeatherIcon] = useState('isClear'); // 設定天氣icon
+    const { rwdMode } = useGlobalStore(); // RWD
 
     //透過 useMemo 保存計算結果
     // useCallback(fn, deps) 等同於 useMemo(() => fn, deps)。
@@ -102,7 +106,7 @@ const WeatherIcon = ({ currentWeatherCode, moment }) => {
     }, [theWeatherIcon]);
 
     return (
-        <IconContainer>
+        <IconContainer rwdMode={rwdMode}>
             {
                 weatherIcons[moment][currentWeatherIcon]
             }

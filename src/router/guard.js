@@ -5,9 +5,11 @@ import { Route, Redirect, Link } from 'react-router-dom';
 // Ant design
 import { Button } from 'antd';
 
-// shared page
-import WeatherApp from 'src/page/weather/WeatherApp';
-import TodoListApp from 'src/page/todoList/todoListApp';
+// GlobalContext
+import { useGlobalStore } from 'src/contexts/globalContext';
+
+// Router
+import config from 'src/router/config';
 
 const Container = styled.div`
     position: fixed;
@@ -32,9 +34,9 @@ const ButtonContainer = styled.div`
     align-items: flex-end;
 
     height: 48px;
-    width: 524px;
+    width: ${(props) => props.rwdMode === 'desktop' ? '524px' : '175px'};
     padding-top: -23px;
-    margin: 128px auto 48px auto;
+    margin: ${(props) => props.rwdMode === 'desktop' ? '128px auto 48px auto' : '32px auto 32px auto'};
 
     background: transparent;
     background: #fff;
@@ -49,7 +51,7 @@ const ButtonContainer = styled.div`
         border-radius: 40px;
 
         text-align: center;
-        font-size:24px;
+        font-size: ${(props) => props.rwdMode === 'desktop' ? '24px' : '18px'};
         font-family: Microsoft JhengHei;
     }
 
@@ -58,10 +60,6 @@ const ButtonContainer = styled.div`
 
         background:${(props) => props.btnColor === 'weather' ? '#2B2B2B' : '#fff'};
         color:${(props) => props.btnColor === 'weather' ? '#FFC753' : '#2B2B2B'};
-
-        &:hover {
-            color: #FFC753;
-        }
     }
 
     .ant-btn:nth-child(2) {
@@ -69,10 +67,6 @@ const ButtonContainer = styled.div`
 
         background:${(props) => props.btnColor === 'todolist' ? '#2B2B2B' : '#fff'};
         color:${(props) => props.btnColor === 'todolist' ? '#FFC753' : '#2B2B2B'};
-
-        &:hover {
-            color: #FFC753;
-        }
     }
 `;
 
@@ -83,6 +77,8 @@ const ButtonContainer = styled.div`
  */
 const Guard = () => {
     const [btnColor, setBtnColor] = useState('weather'); // btn顏色
+    const { rwdMode } = useGlobalStore(); // RWD
+    const { routes = [] } = config; // Routes
 
     /**
      * 點擊即時天氣預報按鈕
@@ -100,7 +96,10 @@ const Guard = () => {
 
     return (
         <Container>
-            <ButtonContainer btnColor={btnColor}>
+            <ButtonContainer
+                btnColor={btnColor}
+                rwdMode={rwdMode}
+            >
                 <Button type="link">
                     <Link
                         to="/weather"
@@ -118,14 +117,17 @@ const Guard = () => {
                     </Link>
                 </Button>
             </ButtonContainer>
-            <Route
-                path={'/weather'}
-                component={WeatherApp}
-            />
-            <Route
-                path={'/todolist'}
-                component={TodoListApp}
-            />
+            {
+                routes.map(({ path, exact, component: Component }) =>
+                    <Route
+                        key={Math.random().toString(16)}
+                        path={path}
+                        exact={exact}
+                    >
+                        <Component />
+                    </Route>
+                )
+            }
             <Redirect to='/weather' />
         </Container>
     );

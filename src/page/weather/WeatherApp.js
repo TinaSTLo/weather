@@ -20,8 +20,8 @@ const theme = {
         foregroundColor: '#fff',
         boxShadow: '0 1px 3px 0 #999999',
         titleColor: '#212121',
-        temperatureColor: '#757575',
-        textColor: '#828282'
+        temperatureColor: '#2B2B2B',
+        textColor: '#2B2B2B'
     },
     dark: {
         backgroundColor: '#1F2022',

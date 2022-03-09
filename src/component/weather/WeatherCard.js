@@ -14,15 +14,21 @@ import { Select } from 'antd';
 // Tool
 import { availableLocations } from 'src/utils';
 
+// GlobalContext
+import { useGlobalStore } from 'src/contexts/globalContext';
+
 const { Option } = Select;
 
 const WeatherCardWrapper = styled.div`
     position: relative;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: ${(props) => props.rwdMode === 'desktop' ? 'wrap' : 'nowrap'};
+    align-items: ${(props) => props.rwdMode === 'desktop' ? 'stretch' : 'center'};
 
-    width: 937px;
-    height: 555px;
-    min-width: 360px;
-    padding: 30px 15px;
+    width: ${(props) => props.rwdMode === 'desktop' ? '937px' : '315px'};
+    height: ${(props) => props.rwdMode === 'desktop' ? '555px' : '660px'};
+    padding: ${(props) => props.rwdMode === 'desktop' && '30px 15px'};
     border-radius: 16px;
     box-sizing: border-box;
 
@@ -35,7 +41,7 @@ const Location = styled.div`
     font-size: 28px;
 
     .ant-select {
-        font-size: 48px;
+        font-size: ${(props) => props.rwdMode === 'desktop' ? '48px' : '36px'};
 
         .ant-select-selector {
             height: 55px;
@@ -46,7 +52,8 @@ const Location = styled.div`
             padding: 10px;
         }
         .ant-select-arrow {
-            color: ${({ theme }) => theme.titleColor} !important;
+            font-size: 18px;
+            color: #AAAAAA !important;
         }
     }
     .ant-select-single:not(.ant-select-customize-input) .ant-select-selector {
@@ -55,9 +62,9 @@ const Location = styled.div`
 `;
 
 const Description = styled.div`
-    margin: -10px 0px 0px 40px;
+    margin: ${(props) => props.rwdMode === 'desktop' ? '-10px 0px 0px 40px' : '42px 0px 0px 0px'};
 
-    font-size: 32px;
+    font-size: ${(props) => props.rwdMode === 'desktop' ? '32px' : '24px'};
     color: ${({ theme }) => theme.textColor};
 `;
 
@@ -65,12 +72,13 @@ const CurrentWeather = styled.div`
     display: flex;
     align-items: center;
     justify-content: space-between;
+    flex-direction: ${(props) => props.rwdMode !== 'desktop' && 'column-reverse'};
 `;
 
 const Temperature = styled.div`
     display: flex;
 
-    margin-left: 40px;
+    margin: ${(props) => props.rwdMode === 'desktop' ? '0px 0px 0px 40px' : '-20px 0px 0px 0px'};
 
     font-size: 128px;
     font-weight: 350;
@@ -88,8 +96,6 @@ const AirFlow = styled.div`
     display: flex;
     align-items: center;
 
-    margin: 0px 0px 0px 40px;
-
     font-size: 32px;
     font-weight: 350;
     color: ${({ theme }) => theme.textColor};
@@ -106,8 +112,6 @@ const Rain = styled.div`
     display: flex;
     align-items: center;
 
-    margin: 0px 0px 20px 40px;
-
     font-size: 32px;
     font-weight: 350;
     color: ${({ theme }) => theme.textColor};
@@ -122,12 +126,12 @@ const Rain = styled.div`
 
 const Refresh = styled.div`
     position: absolute;
-    right: 115px;
-    bottom: 60px;
+    right: ${(props) => props.rwdMode === 'desktop' && '115px'};
+    bottom: ${(props) => props.rwdMode === 'desktop' ? '70px' : '30px'};
     display: inline-flex;
     align-items: flex-end;
 
-    font-size: 18px;
+    font-size: ${(props) => props.rwdMode === 'desktop' ? '18px' : '16px'};
     color: #AAAAAA;
 
     svg {
@@ -151,8 +155,16 @@ const Refresh = styled.div`
 `;
 
 const SelectStyle = styled(Select)`
-    width: 215px;
+    width: ${(props) => props.rwdMode === 'desktop' ? '215px' : '175px'};
     margin: 10px;
+`;
+
+const AirRainContainer = styled.div`
+    display: flex;
+    align-items: flex-start;
+    flex-direction: column;
+
+    margin: ${(props) => props.rwdMode === 'desktop' ? '0px 0px 0px 40px' : '-20px 0px 0px 0px'};
 `;
 
 /**
@@ -170,6 +182,8 @@ const WeatherCard = ({ weatherElement, moment, fetchData, cityName, setCurrentCi
     const locations = availableLocations.map((location) => location.cityName);// 取地區的城市名稱
     const [locationName, setLocationName] = useState(cityName);// 城市名稱
     const inputLocationRef = useRef(null);// 存loaction input ref
+
+    const { rwdMode } = useGlobalStore(); // RWD
 
     const {
         observationTime,
@@ -198,14 +212,15 @@ const WeatherCard = ({ weatherElement, moment, fetchData, cityName, setCurrentCi
     };
 
     return (
-        <WeatherCardWrapper>
-            <Location>
+        <WeatherCardWrapper rwdMode={rwdMode}>
+            <Location rwdMode={rwdMode}>
                 <SelectStyle
                     ref={inputLocationRef}
                     defaultValue={locationName}
                     onChange={handleChange}
                     bordered={false}
                     dropdownStyle={{ background: '#FEC753', borderRadius: 8, textAlign: 'center' }}
+                    rwdMode={rwdMode}
                 >
                     {
                         locations &&
@@ -221,29 +236,43 @@ const WeatherCard = ({ weatherElement, moment, fetchData, cityName, setCurrentCi
                     }
                 </SelectStyle>
             </Location >
-            <Description>
-                {description}
-                {comfortability}
+            <Description rwdMode={rwdMode}>
+                {
+                    rwdMode === 'desktop' &&
+                    description + comfortability
+                }
             </Description>
-            <CurrentWeather>
-                <Temperature>
+            <CurrentWeather rwdMode={rwdMode}>
+                <Temperature rwdMode={rwdMode}>
                     {Math.round(temperature)}
                     <Celsius>°C</Celsius>
                 </Temperature>
+                <Description>
+                    {
+                        rwdMode !== 'desktop' &&
+                        description + comfortability
+                    }
+                </Description>
                 <WeatherIcon
                     currentWeatherCode={weatherCode}
                     moment={moment || 'day'}
                 />
             </CurrentWeather>
-            <AirFlow>
-                <Wind />
-                {windSpeed} m/h
-            </AirFlow>
-            <Rain>
-                <RainIcon />
-                {Math.round(rainPossibility)} %
-            </Rain>
-            <Refresh onClick={fetchData} isLoading={isLoading}>
+            <AirRainContainer rwdMode={rwdMode}>
+                <AirFlow>
+                    <Wind />
+                    {windSpeed} m/h
+                </AirFlow>
+                <Rain>
+                    <RainIcon />
+                    {Math.round(rainPossibility)} %
+                </Rain>
+            </AirRainContainer>
+            <Refresh
+                onClick={fetchData}
+                isLoading={isLoading}
+                rwdMode={rwdMode}
+            >
                 最後觀測時間：
                 {
                     observationTime &&
