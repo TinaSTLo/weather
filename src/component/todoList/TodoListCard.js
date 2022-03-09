@@ -152,12 +152,12 @@ const TodoListCard = ({ todos, setTodos }) => {
                                     {
                                         todos.map((todo) =>
                                             <TodoItem
-                                                key={todo.id}
+                                                key={-todo.id}
                                                 todo={todo}
                                                 handleToggleIsDone={handleToggleIsDone}
                                                 handleDeleteTodo={handleDeleteTodo}
                                             />
-                                        )
+                                        ).reverse()
                                     }
                                 </AllTodo>
                             </TabPaneStyle>
@@ -173,7 +173,7 @@ const TodoListCard = ({ todos, setTodos }) => {
                                                     handleToggleIsDone={handleToggleIsDone}
                                                     handleDeleteTodo={handleDeleteTodo}
                                                 />
-                                            )
+                                            ).reverse()
                                     }
                                 </AllTodo>
                             </TabPaneStyle>
@@ -189,7 +189,7 @@ const TodoListCard = ({ todos, setTodos }) => {
                                                     handleToggleIsDone={handleToggleIsDone}
                                                     handleDeleteTodo={handleDeleteTodo}
                                                 />
-                                            )
+                                            ).reverse()
                                     }
                                 </AllTodo>
                             </TabPaneStyle>
