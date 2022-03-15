@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import styled from '@emotion/styled';
 import { ThemeProvider } from '@emotion/react';
 
@@ -7,6 +7,7 @@ import TodoListCard from 'src/component/todoList/TodoListCard';
 
 // Ant design
 import { Input } from 'antd';
+import { PlusOutlined } from '@ant-design/icons';
 
 // Global context
 import { useGlobalStore } from 'src/contexts/globalContext';
@@ -29,11 +30,14 @@ const Container = styled.div`
     justify-content: flex-start;
 
     height: calc(100vh - 47px);
+    width: 90%;
+    max-width: 937px;
 `;
 
 const InputStyle = styled(Input)`
-    width: 937px;
-    height: 75px;
+    width: 90%;
+    max-width: 937px;
+    height: ${({ rwdMode }) => rwdMode === 'desktop' ? 85 : 74}px;
     margin-bottom: 16px;
     padding-left: 16px;
     border-radius: 16px;
@@ -41,14 +45,27 @@ const InputStyle = styled(Input)`
     box-shadow: 0px 3px 6px #00000029;
 
     font-size: 24px;
+
+    input.ant-input {
+        font-size: 18px;
+    }
+`;
+
+const PlusButton = styled.a``;
+
+const PlusOutlinedStyle = styled(PlusOutlined)`
+    font-size: 22;
+    color: '#1890ff;
 `;
 
 const TodoList = () => {
-    const { id, todos, setTodos } = useGlobalStore();
-    const [singleValue, setSingleValue] = useState(''); // input值
+    const { id, todos, setTodos, rwdMode } = useGlobalStore();
+
+    const [singleValue, setSingleValue] = useState(''); // Input value
+    const inputRef = useRef(); // Input ref
 
     /**
-     * 待辦事項 input 設定singleValue值
+     * Todolist input set singleValue
      *
      * @param {*} e event
      */
@@ -57,18 +74,19 @@ const TodoList = () => {
     };
 
     /**
-     * 監聽按Enter後 設定setTodos值
+     * Listening when press Enter, SetTodos value
      *
      * @param {*} e event
      */
     const onKeyPress = (e) => {
-        if (e.key === 'Enter') {
-            if (e.target.value) {
+        const getInputValue = inputRef?.current?.state?.value;
+        if (e.key === 'Enter' || e.type === 'click') {
+            if (getInputValue) {
                 setTodos([
                     ...todos,
                     {
                         id: id.current,
-                        content: e.target.value,
+                        content: getInputValue,
                         isDone: false
                     }
                 ]);
@@ -78,14 +96,30 @@ const TodoList = () => {
         }
     };
 
+    /**
+     * When singleValue change, focus input.
+     */
+    useEffect(() => {
+        inputRef.current.focus();
+    }, [singleValue]);
+
     return (
-        <ThemeProvider theme={theme.light}>
+        <ThemeProvider theme={theme.light} >
             <InputStyle
+                ref={inputRef}
                 placeholder="請輸入待辦事項"
                 onChange={handleInputChange}
                 onKeyPress={onKeyPress}
                 value={singleValue}
+                rwdMode={rwdMode}
+                suffix={
+                    rwdMode !== 'desktop' &&
+                    <PlusButton onClick={onKeyPress}>
+                        <PlusOutlinedStyle />
+                    </PlusButton>
+                }
             />
+            {/* <Button>Submit</Button> */}
             <Container>
                 <TodoListCard
                     todos={todos}

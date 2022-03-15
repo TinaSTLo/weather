@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import styled from '@emotion/styled';
 
 // Ant design
@@ -7,6 +7,9 @@ import { Empty, Tabs } from 'antd';
 // Shared components
 import TodoItem from 'src/component/todoList/todoItem';
 
+// GlobalContext
+import { useGlobalStore } from 'src/contexts/globalContext';
+
 const { TabPane } = Tabs;
 
 const TodoListCardWrapper = styled.div`
@@ -14,12 +17,11 @@ const TodoListCardWrapper = styled.div`
     display: flex;
     align-items: center;
     flex-direction: column;
-    justify-content: ${props => props.todos.length === 0 ? 'center' : 'space-between'};
+    justify-content: ${({ todos }) => todos.length === 0 ? 'center' : 'space-between'};
 
-    width: 937px;
-    height: 514px;
+    width: 100%;
+    min-height: ${({ rwdMode, todos }) => rwdMode === 'desktop' ? 514 : todos.length === 0 ? 213 : 542}px;
     padding: 15px 0px;
-    min-width: 360px;
     box-sizing: border-box;
     border-radius: 16px;
     
@@ -30,24 +32,32 @@ const TodoListCardWrapper = styled.div`
 
 const EmptyStyle = styled(Empty)`
     .ant-empty-description{
-        font-size: 18px;
+        font-size: ${({ rwdMode }) => rwdMode === 'desktop' ? 18 : 16}px;
     }
 `;
 
 const TabsStyle = styled(Tabs)`
-    width: 900px;
-
+    width: 100%;
+    
     .ant-tabs-tab {
-        width: 278px;
         justify-content: center;
+        width: ${({ wrapperWidth }) => wrapperWidth ? wrapperWidth / 3 : 312}px;
 
         .ant-tabs-tab-btn {
             color: #AAAAAA;
-            font-size: 24px;
+            font-size: ${({ rwdMode }) => rwdMode === 'desktop' ? 24 : 18}px;
         }
         &.ant-tabs-tab-active .ant-tabs-tab-btn {
             color: #2B2B2B;
             font-weight: 500;
+        }
+    }
+
+    .ant-tabs-nav .ant-tabs-nav-wrap {
+        flex-direction: column;
+
+        .ant-tabs-nav-list {
+            justify-content: space-evenly;
         }
     }
 
@@ -58,6 +68,7 @@ const TabsStyle = styled(Tabs)`
 
 const TabPaneStyle = styled(TabPane)`
     overflow: auto;
+    width: 95%;
 `;
 
 const AllTodo = styled.div`
@@ -66,8 +77,9 @@ const AllTodo = styled.div`
     flex-wrap: nowrap;
     justify-content: flex-start;
 
-    height: 260px;
-    margin-left: 40px;
+    height: ${({ rwdMode }) => rwdMode === 'desktop' ? 260 : 300}px;
+    margin-left: ${({ rwdMode }) => rwdMode === 'desktop' ? 60 : 15}px;
+    overflow-x: hidden;
 `;
 
 const BottomFlex = styled.div`
@@ -75,34 +87,61 @@ const BottomFlex = styled.div`
     justify-content: space-between;
 
     width: 100%;
-    padding: 0px 65px;
+    padding: 0px 60px;
     margin-bottom: 18px;
+    ${({ rwdMode }) => {
+        if (rwdMode !== 'desktop') {
+            return `
+                flex-direction: column;
+                align-items: center;
+            `;
+        }
+    }};
+`;
 
-    font-size: 24px;
+const NotDone = styled.div`
+    font-size: ${({ rwdMode }) => rwdMode === 'desktop' ? 24 : 18}px;
+    ${({ rwdMode }) => {
+        if (rwdMode !== 'desktop') {
+            return `
+                padding-bottom: 34px;
+            `;
+        }
+    }};
 `;
 
 const CleanDone = styled.div`
-    padding: 0px 30px;
+    padding: ${({ rwdMode }) => rwdMode === 'desktop' ? '0px 30px;' : '3px 36px'}; 
     border: 1px solid #FEC753;
     border-radius: 13px;
 
     cursor: pointer;
+    font-size: ${({ rwdMode }) => rwdMode === 'desktop' ? 24 : 16}px;
+`;
+
+const EmptyText = styled.div`
+    margin-top: 40px;
 `;
 
 /**
- * 待辦清單頁面
+ * Todo List Layout
  *
- * @param {object} todos todo object
- * @param {function(e)} setTodos 改變todo object
+ * @param {object} todos            Todo object
+ * @param {function(e)} setTodos    Change todo object
  *
  * @returns {JSX.Element}
  */
 const TodoListCard = ({ todos, setTodos }) => {
-    const notDoneNumber = todos.filter(todo => todo.isDone === false).length; // 未完成項目數量
+    const notDoneNumber = todos.filter(todo => todo.isDone === false).length; // Not done items number
+
+    const { rwdMode } = useGlobalStore(); // RWD
+
+    const [wrapperWidth, setWrapperWidth] = useState(null); // Client width
+    const wrapperRef = useRef(null); // Wrapper Ref
 
     /**
-     * 利用setTodos 改變todo object為done
-     * @param {number} id 帶入該item的id
+     * Use setTodos and change todo object to done
+     * @param {number} id Item id when clicking
      */
     const handleToggleIsDone = (id) => {
         setTodos(todos.map(todo => {
@@ -115,40 +154,60 @@ const TodoListCard = ({ todos, setTodos }) => {
     };
 
     /**
-     * 刪除該筆item
-     * @param {number} id 帶入該item的id
+     * Delete this item
+     * @param {number} id Item id when clicking
      */
     const handleDeleteTodo = (id) => {
         setTodos(todos.filter(todo => todo.id !== id));
     };
 
     /**
-     * 清除所有已完成的item
+     * Clear all items which are done
      */
     const handleDeleteAllTodo = () => {
         setTodos(todos.filter(todo => todo.isDone === false));
     };
 
+    /**
+     * When window change size set wrapper width change
+     */
+    useEffect(() => {
+        window.onresize = () => {
+            setWrapperWidth(wrapperRef.current?.clientWidth);
+        };
+    }, [wrapperWidth]);
+
 
     return (
-        <TodoListCardWrapper todos={todos}>
+        <TodoListCardWrapper
+            todos={todos}
+            rwdMode={rwdMode}
+            ref={wrapperRef}
+        >
             {
                 todos.length === 0
                     ?
                     <EmptyStyle
                         image={Empty.PRESENTED_IMAGE_SIMPLE}
                         description={
-                            <span>
+                            <EmptyText>
                                 未有待辦事項，請由上方輸入<br />輸入完成後按Enter即可將項目加入清單
-                            </span>
+                            </EmptyText>
                         }
+                        rwdMode={rwdMode}
                     >
                     </EmptyStyle>
                     :
                     <>
-                        <TabsStyle defaultActiveKey='1' size='large'>
+                        <TabsStyle
+                            defaultActiveKey='1'
+                            size='large'
+                            rwdMode={rwdMode}
+                            tabBarStyle={{ color: '#800' }}
+                            wrapperWidth={wrapperWidth}
+                        >
                             <TabPaneStyle tab='全部' key='1'>
-                                <AllTodo>
+                                <AllTodo rwdMode={rwdMode}>
                                     {
                                         todos.map((todo) =>
                                             <TodoItem
@@ -162,7 +221,7 @@ const TodoListCard = ({ todos, setTodos }) => {
                                 </AllTodo>
                             </TabPaneStyle>
                             <TabPaneStyle tab='待完成' key='2'>
-                                <AllTodo>
+                                <AllTodo rwdMode={rwdMode}>
                                     {
                                         todos
                                             .filter(todo => todo.isDone === false)
@@ -178,7 +237,7 @@ const TodoListCard = ({ todos, setTodos }) => {
                                 </AllTodo>
                             </TabPaneStyle>
                             <TabPaneStyle tab='已完成' key='3'>
-                                <AllTodo>
+                                <AllTodo rwdMode={rwdMode}>
                                     {
                                         todos
                                             .filter(todo => todo.isDone === true)
@@ -194,9 +253,14 @@ const TodoListCard = ({ todos, setTodos }) => {
                                 </AllTodo>
                             </TabPaneStyle>
                         </TabsStyle>
-                        <BottomFlex>
-                            {notDoneNumber}個待完成項目
-                            <CleanDone onClick={handleDeleteAllTodo}>
+                        <BottomFlex rwdMode={rwdMode}>
+                            <NotDone rwdMode={rwdMode}>
+                                {notDoneNumber}個待完成項目
+                            </NotDone>
+                            <CleanDone
+                                onClick={handleDeleteAllTodo}
+                                rwdMode={rwdMode}
+                            >
                                 清除已完成項目
                             </CleanDone>
                         </BottomFlex>

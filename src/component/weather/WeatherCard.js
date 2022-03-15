@@ -12,7 +12,7 @@ import { ReactComponent as Wind } from 'src/assets/images/icon_wind.svg';
 import { Select } from 'antd';
 
 // Tool
-import { availableLocations } from 'src/utils';
+import { availableLocations } from 'src/page/weather/data/utils';
 
 // GlobalContext
 import { useGlobalStore } from 'src/contexts/globalContext';
@@ -23,12 +23,12 @@ const WeatherCardWrapper = styled.div`
     position: relative;
     display: flex;
     flex-direction: column;
-    flex-wrap: ${(props) => props.rwdMode === 'desktop' ? 'wrap' : 'nowrap'};
-    align-items: ${(props) => props.rwdMode === 'desktop' ? 'stretch' : 'center'};
+    flex-wrap: ${({ rwdMode }) => rwdMode === 'desktop' ? 'wrap' : 'nowrap'};
+    align-items: ${({ rwdMode }) => rwdMode === 'desktop' ? 'stretch' : 'center'};
 
-    width: ${(props) => props.rwdMode === 'desktop' ? '937px' : '315px'};
-    height: ${(props) => props.rwdMode === 'desktop' ? '555px' : '660px'};
-    padding: ${(props) => props.rwdMode === 'desktop' && '30px 15px'};
+    width: 100%;
+    height: ${({ rwdMode }) => rwdMode === 'desktop' ? 555 : 660}px;
+    padding: ${({ rwdMode }) => rwdMode === 'desktop' && '30px 15px'};
     border-radius: 16px;
     box-sizing: border-box;
 
@@ -41,7 +41,7 @@ const Location = styled.div`
     font-size: 28px;
 
     .ant-select {
-        font-size: ${(props) => props.rwdMode === 'desktop' ? '48px' : '36px'};
+        font-size: ${({ rwdMode }) => rwdMode === 'desktop' ? 48 : 36}px;
 
         .ant-select-selector {
             height: 55px;
@@ -62,9 +62,9 @@ const Location = styled.div`
 `;
 
 const Description = styled.div`
-    margin: ${(props) => props.rwdMode === 'desktop' ? '-10px 0px 0px 40px' : '42px 0px 0px 0px'};
+    margin: ${({ rwdMode }) => rwdMode === 'desktop' ? '-10px 0px 0px 40px' : '42px 0px 0px 0px'};
 
-    font-size: ${(props) => props.rwdMode === 'desktop' ? '32px' : '24px'};
+    font-size: ${({ rwdMode }) => rwdMode === 'desktop' ? 32 : 24}px;
     color: ${({ theme }) => theme.textColor};
 `;
 
@@ -72,13 +72,13 @@ const CurrentWeather = styled.div`
     display: flex;
     align-items: center;
     justify-content: space-between;
-    flex-direction: ${(props) => props.rwdMode !== 'desktop' && 'column-reverse'};
+    flex-direction: ${({ rwdMode }) => rwdMode !== 'desktop' && 'column-reverse'};
 `;
 
 const Temperature = styled.div`
     display: flex;
 
-    margin: ${(props) => props.rwdMode === 'desktop' ? '0px 0px 0px 40px' : '-20px 0px 0px 0px'};
+    margin: ${({ rwdMode }) => rwdMode === 'desktop' ? '0px 0px 0px 40px' : '-20px 0px 0px 0px'};
 
     font-size: 128px;
     font-weight: 350;
@@ -126,12 +126,12 @@ const Rain = styled.div`
 
 const Refresh = styled.div`
     position: absolute;
-    right: ${(props) => props.rwdMode === 'desktop' && '115px'};
-    bottom: ${(props) => props.rwdMode === 'desktop' ? '70px' : '30px'};
+    right: ${({ rwdMode }) => rwdMode === 'desktop' && 115}px;
+    bottom: ${({ rwdMode }) => rwdMode === 'desktop' ? 70 : 30}px;
     display: inline-flex;
     align-items: flex-end;
 
-    font-size: ${(props) => props.rwdMode === 'desktop' ? '18px' : '16px'};
+    font-size: ${({ rwdMode }) => rwdMode === 'desktop' ? 18 : 16}px;
     color: #AAAAAA;
 
     svg {
@@ -141,7 +141,7 @@ const Refresh = styled.div`
 
         cursor: pointer;
         animation: rotate infinite 1.5s linear;
-        animation-duration: ${({ isLoading }) => (isLoading ? '1.5s' : '0s')};
+        animation-duration: ${({ isLoading }) => (isLoading ? 1.5 : 0)}s;
     }
 
     @keyframes rotate {
@@ -155,7 +155,7 @@ const Refresh = styled.div`
 `;
 
 const SelectStyle = styled(Select)`
-    width: ${(props) => props.rwdMode === 'desktop' ? '215px' : '175px'};
+    width: ${({ rwdMode }) => rwdMode === 'desktop' ? 215 : 175}px;
     margin: 10px;
 `;
 
@@ -164,26 +164,27 @@ const AirRainContainer = styled.div`
     align-items: flex-start;
     flex-direction: column;
 
-    margin: ${(props) => props.rwdMode === 'desktop' ? '0px 0px 0px 40px' : '-20px 0px 0px 0px'};
+    margin: ${({ rwdMode }) => rwdMode === 'desktop' ? '0px 0px 0px 40px' : '-20px 0px 0px 0px'};
 `;
 
 /**
- * 即時天氣預報 頁面
+ * Weather forecast layout
  *
- * @param {object} weatherElement 各種天氣參數
- * @param {string} moment 取得現在時間狀態(day/night)
- * @param {function(e)} fetchData 取天氣API
- * @param {string} cityName 城市名稱
- * @param {function(e)} setCurrentCity 現在選取的城市
+ * @param {object} weatherElement       Elements with Weather
+ * @param {string} moment               Get current time status (day/night)
+ * @param {function(e)} fetchData       Get weather API
+ * @param {string} cityName             City's name
+ * @param {function(e)} setCurrentCity  Get current city
  *
  * @returns {JSX.Element}
  */
 const WeatherCard = ({ weatherElement, moment, fetchData, cityName, setCurrentCity }) => {
-    const locations = availableLocations.map((location) => location.cityName);// 取地區的城市名稱
-    const [locationName, setLocationName] = useState(cityName);// 城市名稱
-    const inputLocationRef = useRef(null);// 存loaction input ref
+    const locations = availableLocations.map((location) => location.cityName); // Get city name
 
     const { rwdMode } = useGlobalStore(); // RWD
+
+    const [locationName, setLocationName] = useState(cityName); // City Name
+    const inputLocationRef = useRef(null); // 存loaction input ref
 
     const {
         observationTime,
@@ -197,9 +198,9 @@ const WeatherCard = ({ weatherElement, moment, fetchData, cityName, setCurrentCi
     } = weatherElement;
 
     /**
-     * 選取select component
+     * When select a select component
      *
-     * @param {string} value select值
+     * @param {string} value selected value
      */
     const handleChange = (value) => {
         if (locations.includes(value)) {

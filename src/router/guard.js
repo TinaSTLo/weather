@@ -34,12 +34,16 @@ const ButtonContainer = styled.div`
     align-items: flex-end;
 
     height: 48px;
-    width: ${(props) => props.rwdMode === 'desktop' ? '524px' : '175px'};
+    width: 90%;
+
+    max-width: 937px;
     padding-top: -23px;
-    margin: ${(props) => props.rwdMode === 'desktop' ? '128px auto 48px auto' : '32px auto 32px auto'};
+    margin: ${({ rwdMode }) => rwdMode === 'desktop' ? '128px auto 48px auto' : '32px auto 32px auto'};
 
     background: transparent;
     background: #fff;
+
+    border-radius: 30px;
 
     .ant-btn {
         display: flex;
@@ -51,48 +55,40 @@ const ButtonContainer = styled.div`
         border-radius: 40px;
 
         text-align: center;
-        font-size: ${(props) => props.rwdMode === 'desktop' ? '24px' : '18px'};
+        font-size: ${({ rwdMode }) => rwdMode === 'desktop' ? 24 : 18}px;
         font-family: Microsoft JhengHei;
     }
 
     .ant-btn:nth-child(1) {
-        margin-left: -40%;
-
-        background:${(props) => props.btnColor === 'weather' ? '#2B2B2B' : '#fff'};
-        color:${(props) => props.btnColor === 'weather' ? '#FFC753' : '#2B2B2B'};
+        background:${({ btnColor }) => btnColor === 'weather' ? '#2B2B2B' : '#fff'};
+        color:${({ btnColor }) => btnColor === 'weather' ? '#FFC753' : '#2B2B2B'};
     }
 
     .ant-btn:nth-child(2) {
-        margin-right: -40%;
-
-        background:${(props) => props.btnColor === 'todolist' ? '#2B2B2B' : '#fff'};
-        color:${(props) => props.btnColor === 'todolist' ? '#FFC753' : '#2B2B2B'};
+        background:${({ btnColor }) => btnColor === 'todolist' ? '#2B2B2B' : '#fff'};
+        color:${({ btnColor }) => btnColor === 'todolist' ? '#FFC753' : '#2B2B2B'};
     }
 `;
 
 /**
- * 分頁細項
+ * router detail
  *
- * @returns {JSX.Element}
+ * @returns {JSX.Element} JSX
  */
 const Guard = () => {
-    const [btnColor, setBtnColor] = useState('weather'); // btn顏色
+    const [btnColor, setBtnColor] = useState('weather'); // button color
     const { rwdMode } = useGlobalStore(); // RWD
-    const { routes = [] } = config; // Routes
+    const { routes = [] } = config; // Routes array
 
     /**
-     * 點擊即時天氣預報按鈕
+     * When clicking tab for weather button
      */
-    const onClickBtnWeather = () => {
-        setBtnColor('weather');
-    };
+    const onClickBtnWeather = () => setBtnColor('weather');
 
     /**
-     * 點擊待辦清單按鈕
+     * When clicking tab for todolist button
      */
-    const onClickBtnTodolist = () => {
-        setBtnColor('todolist');
-    };
+    const onClickBtnTodolist = () => setBtnColor('todolist');
 
     return (
         <Container>

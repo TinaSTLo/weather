@@ -5,9 +5,12 @@ import styled from '@emotion/styled';
 import { ReactComponent as IconCheck } from 'src/assets/images/icon_checked_yellow.svg';
 import { ReactComponent as IconDelete } from 'src/assets/images/icon_delete.svg';
 
+// GlobalContext
+import { useGlobalStore } from 'src/contexts/globalContext';
+
 const InputCheckBox = styled.input`
-    width: 32px;
-    height: 32px;
+    width: ${({ rwdMode }) => rwdMode === 'desktop' ? 32 : 24}px;
+    height: ${({ rwdMode }) => rwdMode === 'desktop' ? 32 : 24}px;
     border-radius: 8px;
     border: 1.5px solid #2B2B2B;
 
@@ -20,12 +23,12 @@ const InputCheckBox = styled.input`
 const InputSpan = styled.div`
     flex: 26 1 0%;
 
-    padding: 18px 0px;
-    margin-left: ${props => props.isDone ? '49px' : '44px'};
+    padding: ${({ rwdMode }) => rwdMode === 'desktop' ? '18px 0px' : '22px 0px'};
+    margin-left: ${({ isDone, rwdMode }) => isDone ? rwdMode === 'desktop' ? 49 : 26 : rwdMode === 'desktop' ? 44 : 18}px;
 
-    font-size: 24px;
-    text-decoration: ${props => props.isDone && 'line-through'};
-    color: ${props => props.isDone && '#AAAAAA'};
+    font-size: ${({ rwdMode }) => rwdMode === 'desktop' ? 24 : 18}px;
+    text-decoration: ${({ isDone }) => isDone && 'line-through'};
+    color: ${({ isDone }) => isDone && '#AAAAAA'};
 `;
 
 const InputContainer = styled.div`
@@ -35,77 +38,76 @@ const InputContainer = styled.div`
 
 const IconCheckStyle = styled(IconCheck)`
     display: flex;
-    flex: 1;
+    flex: ${({ rwdMode }) => rwdMode === 'desktop' ? 1 : 2};
 `;
 
 const IconDeleteStyle = styled(IconDelete)`
-    visibility: ${props => props.showDelete ? 'show' : 'hidden'};
-    
-    margin-right: 40px;
+    display: flex;
+    flex: ${({ rwdMode }) => rwdMode === 'desktop' ? 1 : 2};
+    visibility: ${({ showDelete }) => showDelete ? 'show' : 'hidden'};
+
+    margin-right: ${({ rwdMode }) => rwdMode === 'desktop' ? 15 : 20}px;
 
     cursor: pointer;
 `;
 
 const HrStyle = styled.hr`
-    margin-left: '75px';
+    margin-left: ${({ rwdMode }) => rwdMode === 'desktop' ? 75 : 40}px;
 `;
 
 /**
- * 每一筆todo list item
+ * Every todo list item
  *
- * @param {object} todo 全部item資料
- * @param {function(e)} handleToggleIsDone 點選item為done
- * @param {function(e)} handleDeleteTodo 點選delete icon並刪除
+ * @param {object} todo                     All item data
+ * @param {function(e)} handleToggleIsDone  Select item change to done
+ * @param {function(e)} handleDeleteTodo    Select delete icon and delete it
  *
  * @returns {JSX.Element}
  */
 const TodoItem = ({ todo, handleToggleIsDone, handleDeleteTodo }) => {
     const { id, content, isDone } = todo;
-    const [showDelete, setShowDelete] = useState(false);// 是否顯示刪除icon
+    const [showDelete, setShowDelete] = useState(false);// Show delete icon
+
+    const { rwdMode } = useGlobalStore(); // RWD
 
     /**
-     * checkbox onChange
-     * 觸發handleToggleIsDone設定為done並帶入id
+     * Toggle handleToggleIsDone and set it done with id
      */
-    const handleToggleClick = () => {
-        handleToggleIsDone(id);
-    };
+    const handleToggleClick = () => handleToggleIsDone(id);
 
     /**
-     * 滑鼠滑入item 顯示delete icon
+     * Mouse over item and show delete icon
      */
-    const onMouseOver = () => {
-        setShowDelete(true);
-    };
+    const onMouseOver = () => setShowDelete(true);
 
     /**
-     * 滑鼠滑出item 隱藏delete icon
+     * Mouse out item and hide delete icon
      */
-    const onMouseOut = () => {
-        setShowDelete(false);
-    };
+    const onMouseOut = () => setShowDelete(false);
 
     /**
-     * 點選delete icon 觸發handleDeleteTodo並帶入id
-     * @param {number} id 點選item的id
+     * Click delete icon and delete item with id
+     * @param {number} id Item id when clicking
      */
-    const onClickDelete = (id) => {
-        handleDeleteTodo(id);
-    };
+    const onClickDelete = (id) => handleDeleteTodo(id);
 
     return (
         <>
-            <InputContainer onMouseOver={onMouseOver} onMouseOut={onMouseOut}>
+            <InputContainer
+                onMouseOver={onMouseOver}
+                onMouseOut={onMouseOut}
+            >
                 {
                     isDone
                         ?
-                        <IconCheckStyle />
+                        <IconCheckStyle rwdMode={rwdMode} />
                         :
                         <InputCheckBox
                             type='checkbox'
                             id={id}
                             value='checkbox'
                             onChange={handleToggleClick}
+                            rwdMode={rwdMode}
                         >
                         </InputCheckBox>
                 }
@@ -113,15 +115,22 @@ const TodoItem = ({ todo, handleToggleIsDone, handleDeleteTodo }) => {
                     for='scales'
                     key={id}
                     isDone={isDone}
+                    rwdMode={rwdMode}
                 >
                     {content}
                 </InputSpan>
                 <IconDeleteStyle
-                    showDelete={showDelete}
+                    showDelete={rwdMode === 'desktop' ? showDelete : true}
                     onClick={() => onClickDelete(id)}
+                    rwdMode={rwdMode}
                 />
             </InputContainer>
-            <HrStyle width='86%' size='1' color='#F0F0F0' />
+            <HrStyle
+                width={rwdMode === 'desktop' ? '89%' : '80%'}
+                size='1'
+                color='#F0F0F0'
+                rwdMode={rwdMode}
+            />
         </>
     );
 };

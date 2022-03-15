@@ -7,7 +7,7 @@ import Guard from 'src/router/guard.js';
 /**
  * Router
  *
- * @returns {JSX.Element}
+ * @returns {JSX.Element} JSX
  */
 const Router = () => (
     <BrowserRouter >

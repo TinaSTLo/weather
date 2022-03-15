@@ -3,7 +3,7 @@ import styled from '@emotion/styled';
 import { ThemeProvider } from '@emotion/react';
 
 // Data
-import sunriseAndSunsetData from 'src/sunrise-sunset.json';
+import sunriseAndSunsetData from 'src/page/weather/data/sunrise-sunset.json';
 
 // Shared component
 import WeatherCard from 'src/component/weather/WeatherCard';
@@ -12,7 +12,7 @@ import WeatherCard from 'src/component/weather/WeatherCard';
 import useWeatherApi from 'src/hooks/useWeatherApi';
 
 // Tool
-import { findLocation } from 'src/utils.js';
+import { findLocation } from 'src/page/weather/data/utils';
 
 const theme = {
     light: {
@@ -40,13 +40,15 @@ const Container = styled.div`
     justify-content: flex-start;
 
     height: calc(100vh - 47px);
+    width: 90%;
+    max-width: 937px;
 `;
 
 /**
- * 處理目前時間狀態
- * @param {string} locationName 地區名稱
+ * Deal with current time status
+ * @param {string} locationName Location name
  *
- * @returns {string} day/night
+ * @returns {string}            day/night
  */
 const getMoment = (locationName) => {
     const location = sunriseAndSunsetData.find((data) => data.locationName === locationName);
@@ -74,30 +76,30 @@ const getMoment = (locationName) => {
 };
 
 /**
- * 天氣頁面
+ * Weather layout
  *
- * @returns {JSX.Element}
+ * @returns {JSX.Element} JSX
  */
 const WeatherApp = () => {
-    const storageCity = localStorage.getItem('cityName'); // localStorage取城市名稱
+    const storageCity = localStorage.getItem('cityName'); // LocalStorage get cityName
 
-    const [currentTheme, setCurrentTheme] = useState('light'); // 目前主題
-    const [currentCity, setCurrentCity] = useState(storageCity || '臺北市'); //目前城市名稱
+    const [currentTheme, setCurrentTheme] = useState('light'); // Current theme
+    const [currentCity, setCurrentCity] = useState(storageCity || '臺北市'); // Current city name
 
-    const currentLocation = findLocation(currentCity) || {}; // 目前地點
+    const currentLocation = findLocation(currentCity) || {}; // Current location
     const [weatherElement, fetchData] = useWeatherApi(currentLocation);
 
     const moment = useMemo(() => getMoment(currentLocation.sunriseCityName), [currentLocation.sunriseCityName]);
 
     /**
-     * 設定主題
+     * Set current theme
      */
     useEffect(() => {
         setCurrentTheme(moment === 'day' ? 'light' : 'dark');
     }, [moment]);
 
     /**
-     * localStorage設定城市名稱
+     * localStorage set cityName
      */
     useEffect(() => {
         localStorage.setItem('cityName', currentCity);

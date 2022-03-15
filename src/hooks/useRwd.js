@@ -1,15 +1,12 @@
 import { useState, useLayoutEffect } from 'react';
 
 /**
- * get current device type
+ * Get current device type
  *
- * @param {object} props
- * @param {boolean} props.isActualDevice  是否要實際裝置值，而非解析度判斷
- *
- * @returns {string} // desktop, tablet, mobile
+ * @returns {string}    desktop, tablet, mobile
  */
-const useRWD = (props) => {
-    const [rwdMode, setRwdMode] = useState('desktop'); // RWD mode - desktop, tablet, mobile
+const useRWD = () => {
+    const [rwdMode, setRwdMode] = useState('desktop'); // RWD mode - desktop, mobile
     const mobileDevice = ['Android', 'webOS', 'iPhone', 'iPad', 'iPod', 'BlackBerry', 'Windows Phone'];
 
     /**
@@ -18,24 +15,20 @@ const useRWD = (props) => {
      * @returns {string}
      */
     const getDevice = () => {
-        let mobileType = false; // mobile type device flag
-
-        /**  get device by userAgent --start--*/
-        if (navigator.userAgent.match('iPad')) {
-            setRwdMode('tablet');
-            mobileType = true;
-        } else {
-            for (let i = 0; i < mobileDevice.length; i++) {
-                if (navigator.userAgent.match(mobileDevice[i])) {
-                    setRwdMode('mobile');
-                    mobileType = true;
-                }
+        let mobileType = false; // Mobile type device flag
+        // Get the platform is mac or not (for print)
+        for (let i = 0; i < mobileDevice.length; i++) {
+            if (navigator.userAgent.match('iPhone')) {
+                setRwdMode('iPhone');
+                mobileType = true;
+            } else if (navigator.userAgent.match(mobileDevice[i])) {
+                setRwdMode('mobile');
+                mobileType = true;
             }
         }
-        /**  get device by userAgent --end--*/
 
-        // set device by screen resolution when desktop
-        if (!mobileType && !props?.isActualDevice) {
+        // Set device by screen resolution when desktop
+        if (!mobileType) {
             if (window.innerWidth <= 576) {
                 setRwdMode('mobile');
             } else if (window.innerWidth <= 768) {
@@ -44,12 +37,10 @@ const useRWD = (props) => {
                 setRwdMode('desktop');
             }
         }
-
     };
 
     /**
-     * get current device type when before render
-     *
+     * Get current device type when before render
      */
     useLayoutEffect(() => {
         window.addEventListener('resize', getDevice);

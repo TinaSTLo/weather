@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import styled from '@emotion/styled';
 
-// icon
+// Icon
 import { ReactComponent as DayThunderstorm } from 'src/assets/images/day-thunderstorm.svg';
 import { ReactComponent as DayClear } from 'src/assets/images/day-clear.svg';
 import { ReactComponent as DayCloudyFog } from 'src/assets/images/day-cloudy-fog.svg';
@@ -23,8 +23,9 @@ import { useGlobalStore } from 'src/contexts/globalContext';
 const IconContainer = styled.div`
     flex-basis: 22%;
     margin-top: -25px;
+    padding-right: ${({ rwdMode }) => rwdMode === 'desktop' && '85px'};
 
-    transform: ${(props) => props.rwdMode === 'desktop' ? 'scale(2.5)' : 'scale(1.5)'};
+    transform: ${({ rwdMode }) => rwdMode === 'desktop' ? 'scale(2.5)' : 'scale(1.5)'};
 
     svg {
         max-height: 110px;
@@ -68,11 +69,11 @@ const weatherIcons = {
 };
 
 /**
- * 轉換 weatherCode to weatherType
+ * Change weatherCode to weatherType
  *
- * @param {number} weatherCode 天氣code
+ * @param {number} weatherCode  Weather code
  *
- * @returns {object} weatherType
+ * @returns {object}            weatherType
  */
 const weatherCode2Type = weatherCode => {
     const [weatherType] =
@@ -86,30 +87,31 @@ const weatherCode2Type = weatherCode => {
 };
 
 /**
- * 顯示天氣icon
+ * Weather icon
  *
- * @param {number} currentWeatherCode  目前天氣code
- * @param {string} moment 切換天氣狀態 (day/night)
+ * @param {number} currentWeatherCode   Current weather code
+ * @param {string} moment               Switch weather status (day/night)
  *
- * @returns {JSX.Element}
+ * @returns {JSX.Element}               JSX
  */
 const WeatherIcon = ({ currentWeatherCode, moment }) => {
-    const [currentWeatherIcon, setCurrentWeatherIcon] = useState('isClear'); // 設定天氣icon
+    const [currentWeatherIcon, setCurrentWeatherIcon] = useState('isClear'); // Set weather icon
     const { rwdMode } = useGlobalStore(); // RWD
 
-    //透過 useMemo 保存計算結果
-    // useCallback(fn, deps) 等同於 useMemo(() => fn, deps)。
+    // Use useMemo save the final result
+    // useCallback(fn, deps) is equal useMemo(() => fn, deps)。
     const theWeatherIcon = useMemo(() => weatherCode2Type(currentWeatherCode), [currentWeatherCode]);
 
+    /**
+     * When theWeatherIcon change set different icon
+     */
     useEffect(() => {
         setCurrentWeatherIcon(theWeatherIcon);
     }, [theWeatherIcon]);
 
     return (
         <IconContainer rwdMode={rwdMode}>
-            {
-                weatherIcons[moment][currentWeatherIcon]
-            }
+            {weatherIcons[moment][currentWeatherIcon]}
         </IconContainer>
     );
 };

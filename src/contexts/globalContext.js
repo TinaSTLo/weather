@@ -1,20 +1,22 @@
 import React, { createContext, useContext, useState, useRef } from 'react';
 import useRwd from 'src/hooks/useRwd';
 
+// Context API
 export const Context = createContext();
-
 export const useGlobalStore = () => useContext(Context);
 
 /**
- * 全域provider
+ * Global provider
  *
- * @param {*} children 跟props一樣傳入
- * @returns
+ * @param {*} children      children
+ *
+ * @returns {JSX.Element}   JSX
  */
 export const GlobalContextProvider = ({ children }) => {
-    const id = useRef(1); // 設定為1開始
-    const [todos, setTodos] = useState([]); // todo item陣列
-    const rwdMode = useRwd(); // rwd
+    const [todos, setTodos] = useState([]); // Todo item Array
+    const id = useRef(1); // set 1 with start
+
+    const rwdMode = useRwd(); // RWD
 
     return (
         <Context.Provider
