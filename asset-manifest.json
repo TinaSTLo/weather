@@ -1,0 +1,42 @@
+{
+  "files": {
+    "main.js": "/static/js/main.0985a825.chunk.js",
+    "main.js.map": "/static/js/main.0985a825.chunk.js.map",
+    "runtime-main.js": "/static/js/runtime-main.03804833.js",
+    "runtime-main.js.map": "/static/js/runtime-main.03804833.js.map",
+    "static/css/2.986ed562.chunk.css": "/static/css/2.986ed562.chunk.css",
+    "static/js/2.a1f8178e.chunk.js": "/static/js/2.a1f8178e.chunk.js",
+    "static/js/2.a1f8178e.chunk.js.map": "/static/js/2.a1f8178e.chunk.js.map",
+    "static/js/3.a4b2b739.chunk.js": "/static/js/3.a4b2b739.chunk.js",
+    "static/js/3.a4b2b739.chunk.js.map": "/static/js/3.a4b2b739.chunk.js.map",
+    "index.html": "/index.html",
+    "static/css/2.986ed562.chunk.css.map": "/static/css/2.986ed562.chunk.css.map",
+    "static/js/2.a1f8178e.chunk.js.LICENSE.txt": "/static/js/2.a1f8178e.chunk.js.LICENSE.txt",
+    "static/media/day-clear.bff4c398.svg": "/static/media/day-clear.bff4c398.svg",
+    "static/media/day-cloudy-fog.8d0c74dc.svg": "/static/media/day-cloudy-fog.8d0c74dc.svg",
+    "static/media/day-cloudy.971545b9.svg": "/static/media/day-cloudy.971545b9.svg",
+    "static/media/day-fog.b9cd7da5.svg": "/static/media/day-fog.b9cd7da5.svg",
+    "static/media/day-partially-clear-with-rain.bc86ac68.svg": "/static/media/day-partially-clear-with-rain.bc86ac68.svg",
+    "static/media/day-snowing.c46361c3.svg": "/static/media/day-snowing.c46361c3.svg",
+    "static/media/day-thunderstorm.71e35162.svg": "/static/media/day-thunderstorm.71e35162.svg",
+    "static/media/icon_checked_yellow.0daae279.svg": "/static/media/icon_checked_yellow.0daae279.svg",
+    "static/media/icon_delete.bc26bf19.svg": "/static/media/icon_delete.bc26bf19.svg",
+    "static/media/icon_rain.511f3e46.svg": "/static/media/icon_rain.511f3e46.svg",
+    "static/media/icon_refresh.a438094c.svg": "/static/media/icon_refresh.a438094c.svg",
+    "static/media/icon_wind.9e4cea54.svg": "/static/media/icon_wind.9e4cea54.svg",
+    "static/media/loading.665f7c0d.svg": "/static/media/loading.665f7c0d.svg",
+    "static/media/night-clear.71cf5047.svg": "/static/media/night-clear.71cf5047.svg",
+    "static/media/night-cloudy-fog.b6b5c431.svg": "/static/media/night-cloudy-fog.b6b5c431.svg",
+    "static/media/night-cloudy.7a3d5322.svg": "/static/media/night-cloudy.7a3d5322.svg",
+    "static/media/night-fog.f1b92b9a.svg": "/static/media/night-fog.f1b92b9a.svg",
+    "static/media/night-partially-clear-with-rain.394e7a44.svg": "/static/media/night-partially-clear-with-rain.394e7a44.svg",
+    "static/media/night-snowing.015dc2c7.svg": "/static/media/night-snowing.015dc2c7.svg",
+    "static/media/night-thunderstorm.9cf5fae1.svg": "/static/media/night-thunderstorm.9cf5fae1.svg"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.03804833.js",
+    "static/css/2.986ed562.chunk.css",
+    "static/js/2.a1f8178e.chunk.js",
+    "static/js/main.0985a825.chunk.js"
+  ]
+}
