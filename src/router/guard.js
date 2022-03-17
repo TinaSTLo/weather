@@ -98,7 +98,7 @@ const Guard = () => {
             >
                 <Button type="link">
                     <Link
-                        to="/weather"
+                        to="/"
                         onClick={onClickBtnWeather}
                     >
                         即時天氣預報
@@ -124,7 +124,7 @@ const Guard = () => {
                     </Route>
                 )
             }
-            <Redirect to='/weather' />
+            <Redirect to='/' />
         </Container>
     );
 };

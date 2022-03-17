@@ -6,7 +6,7 @@ import {
 const config = {
     routes: [
         {
-            path: '/weather',
+            path: '/',
             exact: true,
             component: WeatherApp
         },
