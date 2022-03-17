@@ -1,8 +1,8 @@
 {
-  "name": "weather-todolist",
+  "name": "weather_todolist",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://tinastlo.github.io/weather-todolist/",
+  "homepage": "https://tinastlo.github.io/weather-todolist",
   "dependencies": {
     "@emotion/core": "^11.0.0",
     "@emotion/react": "^11.4.1",
@@ -58,14 +58,5 @@
     "eslint-plugin-react": "^7.29.3",
     "eslint-plugin-react-hooks": "^4.3.0",
     "lint-staged": "^11.1.2"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/TinaSTLo/weather_todolist.git"
-  },
-  "author": "tina",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/TinaSTLo/weather_todolist/issues"
   }
 }
