@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.js": "/weather_todolist/static/js/main.2f23fb1e.chunk.js",
-    "main.js.map": "/weather_todolist/static/js/main.2f23fb1e.chunk.js.map",
+    "main.js": "/weather_todolist/static/js/main.fdfe2b04.chunk.js",
+    "main.js.map": "/weather_todolist/static/js/main.fdfe2b04.chunk.js.map",
     "runtime-main.js": "/weather_todolist/static/js/runtime-main.92dc97f9.js",
     "runtime-main.js.map": "/weather_todolist/static/js/runtime-main.92dc97f9.js.map",
     "static/css/2.986ed562.chunk.css": "/weather_todolist/static/css/2.986ed562.chunk.css",
@@ -37,6 +37,6 @@
     "static/js/runtime-main.92dc97f9.js",
     "static/css/2.986ed562.chunk.css",
     "static/js/2.78af9c02.chunk.js",
-    "static/js/main.2f23fb1e.chunk.js"
+    "static/js/main.fdfe2b04.chunk.js"
   ]
 }
