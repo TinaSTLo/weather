@@ -76,7 +76,7 @@ const ButtonContainer = styled.div`
  * @returns {JSX.Element} JSX
  */
 const Guard = () => {
-    const [pageRoute, setpageRoute] = useState('/'); // page Route
+    const [pageRoute, setpageRoute] = useState(''); // Page route
     const { rwdMode } = useGlobalStore(); // RWD
     const { routes = [] } = config; // Routes array
     const { pathname } = useLocation(); // Get pathname
