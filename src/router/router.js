@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter, Switch } from 'react-router-dom';
+import { BrowserRouter } from 'react-router-dom';
 
 // router
 import Guard from 'src/router/guard.js';
@@ -10,10 +10,8 @@ import Guard from 'src/router/guard.js';
  * @returns {JSX.Element} JSX
  */
 const Router = () => (
-    <BrowserRouter >
-        <Switch>
-            <Guard />
-        </Switch>
+    <BrowserRouter basename={process.env.PUBLIC_URL}>
+        <Guard />
     </BrowserRouter>
 );
 

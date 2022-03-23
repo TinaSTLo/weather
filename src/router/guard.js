@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import { Route, Redirect, Link } from 'react-router-dom';
+import { Route, Link, Switch, Redirect, useLocation } from 'react-router-dom';
 
 // Ant design
 import { Button } from 'antd';
@@ -60,13 +60,13 @@ const ButtonContainer = styled.div`
     }
 
     .ant-btn:nth-child(1) {
-        background:${({ btnColor }) => btnColor === 'weather' ? '#2B2B2B' : '#fff'};
-        color:${({ btnColor }) => btnColor === 'weather' ? '#FFC753' : '#2B2B2B'};
+        background:${({ pageRoute }) => pageRoute === '/' ? '#2B2B2B' : '#fff'};
+        color:${({ pageRoute }) => pageRoute === '/' ? '#FFC753' : '#2B2B2B'};
     }
 
     .ant-btn:nth-child(2) {
-        background:${({ btnColor }) => btnColor === 'todolist' ? '#2B2B2B' : '#fff'};
-        color:${({ btnColor }) => btnColor === 'todolist' ? '#FFC753' : '#2B2B2B'};
+        background:${({ pageRoute }) => pageRoute === '/todolist' ? '#2B2B2B' : '#fff'};
+        color:${({ pageRoute }) => pageRoute === '/todolist' ? '#FFC753' : '#2B2B2B'};
     }
 `;
 
@@ -76,24 +76,32 @@ const ButtonContainer = styled.div`
  * @returns {JSX.Element} JSX
  */
 const Guard = () => {
-    const [btnColor, setBtnColor] = useState('weather'); // button color
+    const [pageRoute, setpageRoute] = useState('/'); // page Route
     const { rwdMode } = useGlobalStore(); // RWD
     const { routes = [] } = config; // Routes array
+    const { pathname } = useLocation(); // Get pathname
 
     /**
      * When clicking tab for weather button
      */
-    const onClickBtnWeather = () => setBtnColor('weather');
+    const onClickBtnWeather = () => setpageRoute('/');
 
     /**
      * When clicking tab for todolist button
      */
-    const onClickBtnTodolist = () => setBtnColor('todolist');
+    const onClickBtnTodolist = () => setpageRoute('/todolist');
+
+    /**
+     * Set the current path when page is changed
+     */
+    useEffect(() => {
+        setpageRoute(pathname);
+    }, [pathname]);
 
     return (
         <Container>
             <ButtonContainer
-                btnColor={btnColor}
+                pageRoute={pageRoute}
                 rwdMode={rwdMode}
             >
                 <Button type="link">
@@ -113,18 +121,20 @@ const Guard = () => {
                     </Link>
                 </Button>
             </ButtonContainer>
-            {
-                routes.map(({ path, exact, component: Component }) =>
-                    <Route
-                        key={Math.random().toString(16)}
-                        path={path}
-                        exact={exact}
-                    >
-                        <Component />
-                    </Route>
-                )
-            }
-            <Redirect to='/' />
+            <Switch>
+                {
+                    routes.map(({ path, exact, component: Component }) =>
+                        <Route
+                            key={Math.random().toString(16)}
+                            path={path}
+                            exact={exact}
+                        >
+                            <Component />
+                        </Route>
+                    )
+                }
+                <Redirect to='/' />
+            </Switch>
         </Container>
     );
 };

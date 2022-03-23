@@ -119,7 +119,6 @@ const TodoList = () => {
                     </PlusButton>
                 }
             />
-            {/* <Button>Submit</Button> */}
             <Container>
                 <TodoListCard
                     todos={todos}

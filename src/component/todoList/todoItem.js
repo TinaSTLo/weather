@@ -112,7 +112,6 @@ const TodoItem = ({ todo, handleToggleIsDone, handleDeleteTodo }) => {
                         </InputCheckBox>
                 }
                 <InputSpan
-                    for='scales'
                     key={id}
                     isDone={isDone}
                     rwdMode={rwdMode}

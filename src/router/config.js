@@ -12,7 +12,7 @@ const config = {
         },
         {
             path: '/todolist',
-            // exact: true,
+            exact: true,
             component: TodoListApp
         }
     ]
