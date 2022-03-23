@@ -1,9 +1,13 @@
-import React, { createContext, useContext, useState, useRef, useEffect } from 'react';
+import React, { createContext, useContext, useState, useEffect } from 'react';
 import useRwd from 'src/hooks/useRwd';
+
+// uuid
+import { v4 as uuidv4 } from 'uuid';
 
 // Context API
 export const Context = createContext();
 export const useGlobalStore = () => useContext(Context);
+
 
 /**
  * Global provider
@@ -13,9 +17,9 @@ export const useGlobalStore = () => useContext(Context);
  * @returns {JSX.Element}   JSX
  */
 export const GlobalContextProvider = ({ children }) => {
-    const id = useRef(1); // set 1 with start
+    const id = uuidv4(); // generate uuid
 
-    const storageTodoList = localStorage.getItem('todoList') ? JSON.parse(localStorage.getItem('todoList')) : []; // LocalStorage get todoList
+    const storageTodoList = JSON.parse(localStorage.getItem('todoList')) ?? []; // LocalStorage get todoList
     const [todos, setTodos] = useState(storageTodoList || []); // Current city name
 
     const rwdMode = useRwd(); // RWD

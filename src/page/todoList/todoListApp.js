@@ -12,6 +12,9 @@ import { PlusOutlined } from '@ant-design/icons';
 // Global context
 import { useGlobalStore } from 'src/contexts/globalContext';
 
+// i18n
+import { useIntl } from 'react-intl';
+
 const theme = {
     light: {
         backgroundColor: '#ededed',
@@ -64,6 +67,8 @@ const TodoList = () => {
     const [singleValue, setSingleValue] = useState(''); // Input value
     const inputRef = useRef(); // Input ref
 
+    const { formatMessage: i18n } = useIntl(); // i18n
+
     /**
      * Todolist input set singleValue
      *
@@ -85,13 +90,12 @@ const TodoList = () => {
                 setTodos([
                     ...todos,
                     {
-                        id: id.current,
+                        id: id,
                         content: getInputValue,
                         isDone: false
                     }
                 ]);
                 setSingleValue('');
-                id.current++;
             }
         }
     };
@@ -107,7 +111,7 @@ const TodoList = () => {
         <ThemeProvider theme={theme.light} >
             <InputStyle
                 ref={inputRef}
-                placeholder="請輸入待辦事項"
+                placeholder={i18n({ id: 'todoListApp_placeholder_please_enter_todolist' })/* 請輸入待辦事項 */}
                 onChange={handleInputChange}
                 onKeyPress={onKeyPress}
                 value={singleValue}

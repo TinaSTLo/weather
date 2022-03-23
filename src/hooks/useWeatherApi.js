@@ -29,19 +29,19 @@ const fetchCurrentWeather = (locationName) => {
                 }, {});
 
                 return {
-                    observationTime: locationData.time?.obsTime ? locationData.time.obsTime : NaN, // 觀測資料時間
-                    locationName: locationData?.locationName ? locationData.locationName : NaN, // 測站名稱
-                    temperature: weatherElements?.TEMP > 0 ? weatherElements.TEMP : NaN, // 溫度，單位 攝氏
-                    windSpeed: weatherElements?.WDSD > 0 ? weatherElements.WDSD : NaN, // 風速，單位 公尺/秒
-                    humid: weatherElements?.HUMD > 0 ? weatherElements.HUMD : NaN// 相對濕度，單位 百分比率，此處以實數 0-1.0 記錄
+                    observationTime: locationData.time?.obsTime ?? '', // 觀測資料時間
+                    locationName: locationData?.locationName ?? '', // 測站名稱
+                    temperature: weatherElements?.TEMP > 0 ? weatherElements.TEMP : 0, // 溫度，單位 攝氏
+                    windSpeed: weatherElements?.WDSD > 0 ? weatherElements.WDSD : 0, // 風速，單位 公尺/秒
+                    humid: weatherElements?.HUMD > 0 ? weatherElements.HUMD : 0// 相對濕度，單位 百分比率，此處以實數 0-1.0 記錄
                 };
             } else {
                 return {
                     observationTime: '',
-                    locationName: 'No data',
-                    temperature: 'No data',
-                    windSpeed: 'No data',
-                    humid: 'No data'
+                    locationName: '',
+                    temperature: 0,
+                    windSpeed: 0,
+                    humid: 0
                 };
             }
         });
@@ -76,10 +76,10 @@ const fetchWeatherForecast = (cityName) => {
                 };
             } else {
                 return {
-                    description: 'No data',
-                    weatherCode: 'No data',
-                    rainPossibility: 'No data',
-                    comfortability: 'No data'
+                    description: '',
+                    weatherCode: '',
+                    rainPossibility: '',
+                    comfortability: ''
                 };
             }
         });
@@ -98,12 +98,12 @@ const useWeatherApi = (currentLocation) => {
     const [weatherElement, setWeatherElement] = useState({
         observationTime: new Date(),
         locationName: '',
-        humid: NaN,
-        temperature: NaN,
-        windSpeed: NaN,
+        humid: 0,
+        temperature: 0,
+        windSpeed: 0,
         description: '',
-        weatherCode: NaN,
-        rainPossibility: NaN,
+        weatherCode: 0,
+        rainPossibility: 0,
         comfortability: '',
         isLoading: true //First come in, isLoading is true
     });

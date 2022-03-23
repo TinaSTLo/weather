@@ -10,6 +10,9 @@ import TodoItem from 'src/component/todoList/todoItem';
 // GlobalContext
 import { useGlobalStore } from 'src/contexts/globalContext';
 
+// i18n
+import { useIntl } from 'react-intl';
+
 const { TabPane } = Tabs;
 
 const TodoListCardWrapper = styled.div`
@@ -139,6 +142,8 @@ const TodoListCard = ({ todos, setTodos }) => {
     const [wrapperWidth, setWrapperWidth] = useState(null); // Client width
     const wrapperRef = useRef(null); // Wrapper Ref
 
+    const { formatMessage: i18n } = useIntl(); // i18n
+
     /**
      * Use setTodos and change todo object to done
      * @param {number} id Item id when clicking
@@ -191,7 +196,9 @@ const TodoListCard = ({ todos, setTodos }) => {
                         image={Empty.PRESENTED_IMAGE_SIMPLE}
                         description={
                             <EmptyText>
-                                未有待辦事項，請由上方輸入<br />輸入完成後按Enter即可將項目加入清單
+                                {i18n({ id: 'todoListCard_no_todolist' })/* 未有待辦事項，請由上方輸入 */}
+                                <br />
+                                {i18n({ id: 'todoListCard_press_enter' })/* 輸入完成後按Enter即可將項目加入清單 */}
                             </EmptyText>
                         }
                         rwdMode={rwdMode}
@@ -206,12 +213,12 @@ const TodoListCard = ({ todos, setTodos }) => {
                             tabBarStyle={{ color: '#800' }}
                             wrapperWidth={wrapperWidth}
                         >
-                            <TabPaneStyle tab='全部' key='1'>
+                            <TabPaneStyle tab={i18n({ id: 'todoListCard_tab_all' })/* 全部 */} key='1'>
                                 <AllTodo rwdMode={rwdMode}>
                                     {
                                         todos.map((todo) =>
                                             <TodoItem
-                                                key={-todo.id}
+                                                key={todo.id}
                                                 todo={todo}
                                                 handleToggleIsDone={handleToggleIsDone}
                                                 handleDeleteTodo={handleDeleteTodo}
@@ -220,7 +227,7 @@ const TodoListCard = ({ todos, setTodos }) => {
                                     }
                                 </AllTodo>
                             </TabPaneStyle>
-                            <TabPaneStyle tab='待完成' key='2'>
+                            <TabPaneStyle tab={i18n({ id: 'todoListCard_tab_not_completed' })/* 待完成 */} key='2'>
                                 <AllTodo rwdMode={rwdMode}>
                                     {
                                         todos
@@ -236,7 +243,7 @@ const TodoListCard = ({ todos, setTodos }) => {
                                     }
                                 </AllTodo>
                             </TabPaneStyle>
-                            <TabPaneStyle tab='已完成' key='3'>
+                            <TabPaneStyle tab={i18n({ id: 'todoListCard_tab_completed' })/* 已完成 */} key='3'>
                                 <AllTodo rwdMode={rwdMode}>
                                     {
                                         todos
@@ -255,13 +262,13 @@ const TodoListCard = ({ todos, setTodos }) => {
                         </TabsStyle>
                         <BottomFlex rwdMode={rwdMode}>
                             <NotDone rwdMode={rwdMode}>
-                                {notDoneNumber}個待完成項目
+                                {notDoneNumber} {i18n({ id: 'todoListCard_items_completed' })/* 個待完成項目 */}
                             </NotDone>
                             <CleanDone
                                 onClick={handleDeleteAllTodo}
                                 rwdMode={rwdMode}
                             >
-                                清除已完成項目
+                                {i18n({ id: 'todoListCard_clear_completed' })/* 清除已完成項目 */}
                             </CleanDone>
                         </BottomFlex>
                     </>

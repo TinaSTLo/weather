@@ -11,9 +11,21 @@ import { GlobalContextProvider, useGlobalStore } from 'src/contexts/globalContex
 // Router
 import Router from 'src/router/router';
 
+// i18n
+import twLang from 'src/assets/i18n/tw';
+import enLang from 'src/assets/i18n/en';
+import { IntlProvider } from 'react-intl';
+
 // Ant design
 import '@csstools/normalize.css';
 import 'antd/dist/antd.css';
+
+// language set default as zh-tw
+const langSetting = localStorage.getItem('lang')?.toLowerCase() ?? 'zh-tw';
+
+if (localStorage.getItem('lang') === null) {
+    localStorage.setItem('lang', langSetting);
+}
 
 const GlobalStyle = createGlobalStyle`
     body {
@@ -58,8 +70,14 @@ const GlobalRwdStyle = () => {
 const Root = () => (
     <React.StrictMode>
         <GlobalContextProvider>
-            <GlobalRwdStyle />
-            <Router />
+            <IntlProvider
+                defaultLocale={'zh-tw'}
+                locale={langSetting}
+                messages={langSetting === 'zh-tw' ? twLang : enLang}
+            >
+                <GlobalRwdStyle />
+                <Router />
+            </IntlProvider>
         </GlobalContextProvider>
     </React.StrictMode>
 );

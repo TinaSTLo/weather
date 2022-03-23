@@ -11,6 +11,9 @@ import { useGlobalStore } from 'src/contexts/globalContext';
 // Router
 import config from 'src/router/config';
 
+// i18n
+import { useIntl } from 'react-intl';
+
 const Container = styled.div`
     position: fixed;
     top: 0;
@@ -76,10 +79,13 @@ const ButtonContainer = styled.div`
  * @returns {JSX.Element} JSX
  */
 const Guard = () => {
-    const [pageRoute, setpageRoute] = useState(''); // Page route
-    const { rwdMode } = useGlobalStore(); // RWD
     const { routes = [] } = config; // Routes array
+
+    const [pageRoute, setpageRoute] = useState(''); // Page route
     const { pathname } = useLocation(); // Get pathname
+    const { rwdMode } = useGlobalStore(); // RWD
+
+    const { formatMessage: i18n } = useIntl(); // i18n
 
     /**
      * When clicking tab for weather button
@@ -109,7 +115,7 @@ const Guard = () => {
                         to="/"
                         onClick={onClickBtnWeather}
                     >
-                        即時天氣預報
+                        {i18n({ id: 'guard_weather_btn' }/* 即時天氣預報 */)}
                     </Link>
                 </Button>
                 <Button type="link">
@@ -117,7 +123,7 @@ const Guard = () => {
                         to="/todolist"
                         onClick={onClickBtnTodolist}
                     >
-                        待辦清單
+                        {i18n({ id: 'guard_todolist_btn' }/* 待辦清單 */)}
                     </Link>
                 </Button>
             </ButtonContainer>
