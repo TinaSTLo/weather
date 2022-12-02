@@ -14,6 +14,9 @@ import useWeatherApi from 'src/hooks/useWeatherApi';
 // Tool
 import { findLocation } from 'src/page/weather/data/utils';
 
+// Ant design
+import { Button } from 'antd';
+
 const theme = {
     light: {
         backgroundColor: '#ededed',
@@ -91,6 +94,8 @@ const WeatherApp = () => {
 
     const moment = useMemo(() => getMoment(currentLocation.sunriseCityName), [currentLocation.sunriseCityName]);
 
+    const [count, setCount] = React.useState(0);
+    const [errorMessage, setErrorMessage] = React.useState('');
     /**
      * Set current theme
      */
@@ -107,7 +112,7 @@ const WeatherApp = () => {
 
     return (
         <ThemeProvider theme={theme[currentTheme]}>
-            <Container>
+            <Container data-test='component-app'>
                 <WeatherCard
                     weatherElement={weatherElement}
                     moment={moment}
@@ -115,6 +120,37 @@ const WeatherApp = () => {
                     setCurrentCity={setCurrentCity}
                     cityName={currentLocation.cityName}
                 />
+                <h1 data-test='counter-display'>
+                    <span data-test='count'>{count}</span>
+                </h1>
+                <Button
+                    variant='primary'
+                    data-test='increment-button'
+                    size='lg'
+                    onClick={() => {
+                        setCount(count + 1);
+                        setErrorMessage('');
+                    }}
+                >
+                    Give me a heart !
+                </Button>
+                <Button
+                    variant="primary"
+                    data-test="decrement-button"
+                    size="lg"
+                    onClick={function () {
+                        if (count == 0) {
+                            setErrorMessage('不能再減了');
+                        } else {
+                            setCount(count - 1);
+                        }
+                    }}
+                >
+                    Take away a heart !
+                </Button>
+                <h1>
+                    <span style={{ color: 'red' }}>{errorMessage}</span>
+                </h1>
             </Container>
         </ThemeProvider>
     );
